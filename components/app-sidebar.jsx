@@ -11,8 +11,7 @@ import {
   CircleDollarSign
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import  {NavMain}  from "@/components/nav-main"
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +19,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { NavUser } from "./nav-user"
 
 
 // This is sample data.
@@ -106,7 +106,7 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

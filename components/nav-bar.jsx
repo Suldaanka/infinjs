@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
+import { useUser, getC, UserButton } from "@clerk/nextjs";
+import { Button } from "./ui/button";
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -50,6 +52,12 @@ export default function NavBar() {
     { href: "#contact", label: "Contact" },
   ];
 
+  const { user, isSignedIn } = useUser();
+
+  if (isSignedIn) (
+    console.log(user.id)
+  )
+
   return (
     <div className="mx-auto">
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
@@ -75,11 +83,13 @@ export default function NavBar() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <ModeToggle/>
+            <ModeToggle />
+            {isSignedIn ? (<UserButton />) : (
               <button className="hidden md:flex px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">
-                {/* <Link href="/sign-in">Sign In</Link> */}
-                Sign In
+                <Link href="/sign-in">Sign In</Link>
               </button>
+            )}
+
             {/* Book Now Button */}
             <button className="bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm px-3 py-2 font-medium">
               Book Now
@@ -97,27 +107,27 @@ export default function NavBar() {
         </div>
 
         {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-900 md:hidden">
-            <nav className="flex flex-col p-4 ">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => scrollToSection(e, link.href.substring(1))}
-                  className="border-b border-gray-200 dark:border-gray-700 py-4 text-base font-medium transition-colors hover:text-amber-600"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="mt-6 flex flex-col gap-4">
-                <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm font-medium">
-                  Sign In
-                </button>
-              </div>
-            </nav>
-          </div>
-        )}
+         {mobileMenuOpen && (
+                  <div className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-900 md:hidden">
+                    <nav className="flex flex-col p-4 bg-yellow-200 dark:bg-black">
+                      {navLinks.map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          onClick={(e) => scrollToSection(e, link.href.substring(1))}
+                          className="border-b border-gray-200 dark:border-gray-700 py-4 text-base font-medium transition-colors hover:text-amber-600"
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                      <div className="mt-6 flex flex-col gap-4">
+                        <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm font-medium">
+                          Sign In
+                        </button>
+                      </div>
+                    </nav>
+                  </div>
+                )}
       </header>
     </div>
   );

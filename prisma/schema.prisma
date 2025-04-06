@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid()) // Internal ID
+  clerkId   String   @unique // Clerk User ID
+  name      String?
+  email     String   @unique
+  imageUrl  String?
+  role      Role     @default(USER)
+  bookings  Booking[]
+  orders    Order[]
+  payments  Payment[]
+  expenses  Expense[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  USER
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  number    Int      @unique
+  type      RoomType
+  price     Decimal
+  status    RoomStatus @default(AVAILABLE)
+  bookings  Booking[]
+  orders    Order[] // Added to link room service orders
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum RoomType {
+  SINGLE
+  DOUBLE
+  SUITE
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+model Booking {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  roomId     String
+  room       Room     @relation(fields: [roomId], references: [id])
+  checkIn    DateTime
+  checkOut   DateTime
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model MenuItem {
+  id        String   @id @default(cuid())
+  name      String
+  price     Decimal
+  category  String
+  imageUrl  Json
+  status    MenuItemStatus @default(AVAILABLE)
+  orders    OrderItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum MenuItemStatus {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  tableId   String?
+  table     Table?   @relation(fields: [tableId], references: [id])
+  roomId    String?
+  room      Room?    @relation(fields: [roomId], references: [id]) // New relation for room service orders
+  status    OrderStatus @default(PENDING)
+  items     OrderItem[]
+  total     Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  SERVED
+  CANCELLED
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  menuItemId String
+  menuItem  MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity  Int
+  price     Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Table {
+  id        String   @id @default(cuid())
+  number    Int      @unique
+  capacity  Int
+  status    TableStatus @default(AVAILABLE)
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  amount    Decimal
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  category    ExpenseCategory
+  amount      Decimal
+  type        ExpenseType // ← new enum
+  paidById    String?
+  paidBy      User?    @relation(fields: [paidById], references: [id])
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum ExpenseType {
+  income
+  outcome
+}
+
+enum ExpenseCategory {
+  SALARY
+  MAINTENANCE
+  UTILITIES
+  SUPPLIES
+  OTHER
+}
