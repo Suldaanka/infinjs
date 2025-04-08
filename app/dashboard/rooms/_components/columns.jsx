@@ -19,10 +19,10 @@ import { queryClient } from "@tanstack/react-query";
 
 export   const columns  = (queryClient) => [
   
-  { accessorKey: "description", header: "Description" },
-  { accessorKey: "categoryName", header: "Category" },
-  { accessorKey: "amount", header: "Amount" },
-  { accessorKey: "date", header: "Date" },
+  { accessorKey: "number", header: "Number" },
+  { accessorKey: "price", header: "Price" },
+  { accessorKey: "type", header: "Type" },
+  { accessorKey: "status", header: "Date" },
   {
     accessorKey: "actions", header: "Actions",
     id: "actions",
