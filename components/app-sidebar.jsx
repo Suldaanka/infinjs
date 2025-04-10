@@ -44,7 +44,7 @@ const data = {
     },
     {
       title: "Reservations",
-      url: "/dashboard/reservations",
+      url: "/dashboard/reservation",
       icon: BedDouble,
       isActive: true,
     },

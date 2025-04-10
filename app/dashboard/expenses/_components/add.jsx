@@ -12,8 +12,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useEffect, useState } from "react"
 
-//import { toast } from "sonner"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -27,7 +28,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-
+import { useUser } from "@clerk/nextjs"
+import { useQueryClient } from "@tanstack/react-query";
 
 
 const FormSchema = z.object({
@@ -40,6 +42,26 @@ const FormSchema = z.object({
 });
 
 export function Add() {
+    const [open, setOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [fetchCategories, setFetchCategories] = useState([]);
+    const [newCategory, setNewCategory] = useState("");
+    const queryClient = useQueryClient();
+    
+    useEffect(() => {
+        const fetchCategories = async () => {
+          const response = await fetch('/api/expense/category');
+          const data = await response.json();
+          setFetchCategories(data);
+        };
+      
+        fetchCategories();
+      }, [newCategory]);
+
+    
+
+    const {user} = useUser()
+
 
     const form = useForm({
         resolver: zodResolver(FormSchema),
@@ -51,13 +73,107 @@ export function Add() {
         },
     });
 
-
-    function onSubmit(data) {
-        console.log(data); 
-
+    async function onSubmit(data) {
+        try {
+            setIsSubmitting(true);
+    
+            const currentDate = new Date();
+    
+            // Prepare the data for the API according to your Prisma schema
+            const formattedData = {
+                description: data.description,
+                category: data.category,
+                amount: parseFloat(data.amount),
+                paidById: user.id || null,
+                type: data.type,
+                date: currentDate,
+                createdAt: currentDate,
+            };
+    
+            console.log("Formatted data:", formattedData);
+    
+            // Send data to API
+            const response = await fetch('/api/expense/add', {
+                method: 'POST',     
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formattedData),
+            });
+    
+            if (!response.ok) {
+                // Handle error case
+                throw new Error("Failed to add expense");
+            }
+            
+            // Add these lines to invalidate and refetch the expenses query
+            queryClient.invalidateQueries({ queryKey: ["expenses"] });
+            await queryClient.refetchQueries({ queryKey: ["expenses"] });
+    
+            // If you had toast imported, you could use this
+            toast.success("Expense added successfully");
+    
+            console.log("Expense added:", formattedData);
+    
+            // Reset the form
+            form.reset({
+                description: "",
+                category: "",
+                amount: 0,
+                type: "outcome",
+            });
+    
+            // Close the dialog
+            setOpen(false);
+        } catch (error) {
+            console.error("Error adding expense:", error);
+            toast.error("Failed to add expense");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
+
+    const handleCategoryChange = (e) => {
+        setNewCategory(e.target.value);
+    }
+
+    const handleCategorySubmit = async (e) => {
+        e.preventDefault();
+      
+        try {
+          const addNewCategory = async () => {
+            const response = await fetch('/api/expense/category/add', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ name: newCategory }),
+            })
+      
+            if (!response.ok) {
+              throw new Error('Failed to add category');
+            }
+      
+            // Fetch the updated list of categories
+            const responseCategories = await fetch('/api/expense/category');
+            const data = await responseCategories.json();
+            setFetchCategories(data);
+      
+            //newCategory("");
+          }
+      
+          addNewCategory()
+            .then(() => {
+              toast.success("Category added successfully");
+            })
+      
+        } catch (error) {
+          console.error("Error adding category:", error);
+        }
+      }
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">Add Expense</Button>
             </DialogTrigger>
@@ -101,11 +217,27 @@ export function Add() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="food">Food</SelectItem>
-                                                <SelectItem value="transport">Transport</SelectItem>
-                                                <SelectItem value="bills">Bills</SelectItem>
-                                                <SelectItem value="salary">Salary</SelectItem>
-                                                <SelectItem value="others">Others</SelectItem>
+
+                                                {
+                                                    fetchCategories.length > 0 ? (
+                                                        fetchCategories.map((category) => (
+                                                            <SelectItem key={category.id} value={category.id}>
+                                                                {category.name}
+                                                            </SelectItem>
+                                                        ))
+                                                    ) : (
+                                                        <SelectItem disabled>No categories available</SelectItem>
+
+                                                    )
+                                                }
+
+                                                <div>
+                                                    <form onSubmit={(e) => e.preventDefault()}>
+                                                        <Input placeholder="Add new category" onChange={(e) => handleCategoryChange(e)} />
+                                                        <Button type="submit" onClick={handleCategorySubmit}>Add</Button>
+                                                    </form>
+                                                </div>
+
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -152,10 +284,11 @@ export function Add() {
                                 )}
                             />
 
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                         </form>
                     </Form>
-
                 </div>
             </DialogContent>
         </Dialog>

@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, ChevronDown, Download } from "lucide-react";
 import { Add } from "./_components/add";
+import { usePathname } from "next/navigation";
+import { Addroom } from "../rooms/_components/Add";
 
 // Filter input component for columns
 function Filter({ column }) {
@@ -106,6 +108,9 @@ export function DataTable({ columns, data, amountColumn = "amount" }) {
     document.body.removeChild(link);
   };
 
+  const pathname = usePathname();
+  console.log("Current Pathname:", pathname); // Debugging line
+
   return (
     <div>
       <div className="flex items-center justify-between py-4">
@@ -117,8 +122,12 @@ export function DataTable({ columns, data, amountColumn = "amount" }) {
           className="max-w-sm"
         />
         <div className="flex items-center space-x-2">
-        <Add />
-        
+          {
+            pathname === "/dashboard/expenses" && ( <Add/>)
+          }
+          {
+            pathname === "/dashboard/rooms" && (<Addroom/>)
+          }
         {/* Export button */}
         <Button variant="outline" onClick={exportToCSV}>
           <Download className="mr-2 h-4 w-4" />
@@ -183,18 +192,22 @@ export function DataTable({ columns, data, amountColumn = "amount" }) {
           </TableBody>
           {/* Footer with total calculation */}
           <TableFooter>
-            <TableRow>
-              <TableCell colSpan={columns.findIndex(col => col.accessorKey === amountColumn)}>
-                <div className="text-right font-medium">Total:</div>
-              </TableCell>
-              <TableCell className="font-bold">
-                {new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                }).format(totalAmount)}
-              </TableCell>
-              <TableCell colSpan={columns.length - columns.findIndex(col => col.accessorKey === amountColumn) - 1}></TableCell>
-            </TableRow>
+            {
+              pathname === "/dashboard/expenses" && (
+                <TableRow>
+                <TableCell colSpan={columns.findIndex(col => col.accessorKey === amountColumn)}>
+                  <div className="text-right font-medium">Total:</div>
+                </TableCell>
+                <TableCell className="font-bold">
+                  {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                  }).format(totalAmount)}
+                </TableCell>
+                <TableCell colSpan={columns.length - columns.findIndex(col => col.accessorKey === amountColumn) - 1}></TableCell>
+              </TableRow>
+              ) 
+            }
           </TableFooter>
         </Table>
       </div>
