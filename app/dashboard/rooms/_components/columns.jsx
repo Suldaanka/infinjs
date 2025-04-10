@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { queryClient } from "@tanstack/react-query";
+import { Badge } from "@/components/ui/badge";
 
 
 
@@ -22,7 +23,14 @@ export   const columns  = (queryClient) => [
   { accessorKey: "number", header: "Number" },
   { accessorKey: "price", header: "Price" },
   { accessorKey: "type", header: "Type" },
-  { accessorKey: "status", header: "Date" },
+  { 
+    accessorKey: "status", 
+    header: "Status",
+    cell: ({row}) =>{
+      const status = row.getValue()
+      
+    }
+  },
   {
     accessorKey: "actions", header: "Actions",
     id: "actions",
