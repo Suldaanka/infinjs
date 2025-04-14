@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useEffect, useState } from "react"
-
+import { useMutate } from "@/hooks/useMutate"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,7 +30,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { useUser } from "@clerk/nextjs"
 import { useQueryClient } from "@tanstack/react-query";
-
+import {useFetch} from "@/hooks/useFetch";
 
 const FormSchema = z.object({
     description: z.string().min(2, { message: "Description is required." }),
@@ -44,19 +44,11 @@ const FormSchema = z.object({
 export function Add() {
     const [open, setOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [fetchCategories, setFetchCategories] = useState([]);
     const [newCategory, setNewCategory] = useState("");
     const queryClient = useQueryClient();
-    
-    useEffect(() => {
-        const fetchCategories = async () => {
-          const response = await fetch('/api/expense/category');
-          const data = await response.json();
-          setFetchCategories(data);
-        };
-      
-        fetchCategories();
-      }, [newCategory]);
+    const { mutate: mutateExpense } = useMutate("/api/expense/add",['expenses'] );
+    const { mutate: mutateCategory } = useMutate("/api/expense/category/add", ['categories']);
+    const { data: categories } = useFetch("/api/expense/category", ['categories']);
 
     
 
@@ -92,19 +84,7 @@ export function Add() {
     
             console.log("Formatted data:", formattedData);
     
-            // Send data to API
-            const response = await fetch('/api/expense/add', {
-                method: 'POST',     
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formattedData),
-            });
-    
-            if (!response.ok) {
-                // Handle error case
-                throw new Error("Failed to add expense");
-            }
+            mutateExpense(formattedData);
             
             // Add these lines to invalidate and refetch the expenses query
             queryClient.invalidateQueries({ queryKey: ["expenses"] });
@@ -137,39 +117,14 @@ export function Add() {
         setNewCategory(e.target.value);
     }
 
+   
+
     const handleCategorySubmit = async (e) => {
+        
         e.preventDefault();
       
-        try {
-          const addNewCategory = async () => {
-            const response = await fetch('/api/expense/category/add', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ name: newCategory }),
-            })
-      
-            if (!response.ok) {
-              throw new Error('Failed to add category');
-            }
-      
-            // Fetch the updated list of categories
-            const responseCategories = await fetch('/api/expense/category');
-            const data = await responseCategories.json();
-            setFetchCategories(data);
-      
-            //newCategory("");
-          }
-      
-          addNewCategory()
-            .then(() => {
-              toast.success("Category added successfully");
-            })
-      
-        } catch (error) {
-          console.error("Error adding category:", error);
-        }
+        mutateCategory({ name: newCategory });
+        toast.success("Category added successfully");
       }
 
     return (
@@ -219,8 +174,8 @@ export function Add() {
                                             <SelectContent>
 
                                                 {
-                                                    fetchCategories.length > 0 ? (
-                                                        fetchCategories.map((category) => (
+                                                    categories.length > 0 ? (
+                                                        categories.map((category) => (
                                                             <SelectItem key={category.id} value={category.id}>
                                                                 {category.name}
                                                             </SelectItem>

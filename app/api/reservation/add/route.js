@@ -51,7 +51,11 @@ export async function POST(req) {
       },
     });
 
+  
+
     return NextResponse.json(booking, { status: 201 });
+
+   
 
   } catch (error) {
     console.error("Booking error:", error);
