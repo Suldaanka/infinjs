@@ -25,12 +25,7 @@ export   const columns  = (queryClient) => [
   { accessorKey: "type", header: "Type" },
   { 
     accessorKey: "status", 
-    header: "Status",
-    cell: ({row}) =>{
-      const status = row.getValue()
-      
-    }
-  },
+    header: "Status"},
   {
     accessorKey: "actions", header: "Actions",
     id: "actions",
