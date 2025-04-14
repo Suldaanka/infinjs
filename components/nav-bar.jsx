@@ -52,11 +52,7 @@ export default function NavBar() {
     { href: "#contact", label: "Contact" },
   ];
 
-  const { user, isSignedIn } = useUser();
-
-  if (isSignedIn) (
-    console.log(user.id)
-  )
+  const { isSignedIn } = useUser();
 
   return (
     <div className="mx-auto">

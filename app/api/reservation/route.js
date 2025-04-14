@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
     try {
         const bookings = await prisma.booking.findMany();
-        return NextResponse.json({bookings}, {status: 200});
+        return NextResponse.json(bookings, {status: 200});
     } catch (error) {
         return NextResponse.json(
             {error: "Something went wrong"},

@@ -6,10 +6,10 @@ import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 //import { Calendar } from './ui/calendar'
 import { Input } from './ui/input'
-import { Users } from 'lucide-react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+
 import { Button } from './ui/button'
 import NavBar from './nav-bar'
+import { BookingForm } from './bookingForm'
 
 export default function HeroSection() {
   return (
@@ -53,69 +53,7 @@ export default function HeroSection() {
                     <TabsTrigger value="availability">Check Availability</TabsTrigger>
                   </TabsList>
                   <TabsContent value="reservation" className="mt-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                      <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium">Check In</label>
-                        <div className="flex items-center rounded-md border px-3 py-2 bg-background">
-                          {/* <Calendar className="mr-2 h-4 w-4 text-muted-foreground" /> */}
-                          <Input
-                            type="date"
-                            className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium">Check Out</label>
-                        <div className="flex items-center rounded-md border px-3 py-2 bg-background">
-                          {/* <Calendar className="mr-2 h-4 w-4 text-muted-foreground" /> */}
-                          <Input
-                            type="date"
-                            className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium">Guests</label>
-                        <div className="flex items-center rounded-md border px-3 py-2 bg-background">
-                          <Users className="mr-2 h-4 w-4 text-muted-foreground" />
-                          <Select>
-                            <SelectTrigger className="border-0 p-0 focus:ring-0 bg-transparent">
-                              <SelectValue placeholder="Select guests" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="1">1 Guest</SelectItem>
-                              <SelectItem value="2">2 Guests</SelectItem>
-                              <SelectItem value="3">3 Guests</SelectItem>
-                              <SelectItem value="4">4 Guests</SelectItem>
-                              <SelectItem value="5">5+ Guests</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium">Room Type</label>
-                        <div className="flex items-center rounded-md border px-3 py-2 bg-background">
-                          <Select>
-                            <SelectTrigger className="border-0 p-0 focus:ring-0 bg-transparent">
-                              <SelectValue placeholder="Select room" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="standard">Standard Room</SelectItem>
-                              <SelectItem value="deluxe">Deluxe Room</SelectItem>
-                              <SelectItem value="suite">Executive Suite</SelectItem>
-                              <SelectItem value="family">Family Room</SelectItem>
-                              <SelectItem value="presidential">Presidential Suite</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="flex items-end pb-2">
-                        <Button className="w-full h-10 bg-amber-600 hover:bg-amber-700 text-white">Book Now</Button>
-                      </div>
-                    </div>
-                    <p className="mt-2 text-center text-xs text-muted-foreground">
-                      Best rate guaranteed. No reservation fees.
-                    </p>
+                      <BookingForm/>
                   </TabsContent>
                   <TabsContent value="availability" className="mt-4">
                     <div className="flex flex-col md:flex-row gap-4">

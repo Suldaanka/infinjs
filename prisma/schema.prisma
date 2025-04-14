@@ -52,7 +52,18 @@ enum RoomStatus {
   MAINTENANCE
 }
 
- 
+model Booking {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  roomId     String
+  room       Room     @relation(fields: [roomId], references: [id])
+  checkIn    DateTime
+  checkOut   DateTime
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
 
 enum BookingStatus {
   PENDING
@@ -60,6 +71,7 @@ enum BookingStatus {
   CANCELLED
   COMPLETED
 }
+ 
 
 model MenuItem {
   id        String   @id @default(cuid())
