@@ -76,6 +76,7 @@ export function DataTable({ columns, data, amountColumn = "amount" }) {
   }, 0);
 
   // Function to export data as CSV
+  const pathname = usePathname();
   const exportToCSV = () => {
     // Get filtered data
     const filteredData = table.getFilteredRowModel().rows.map(row => row.original);
@@ -95,21 +96,22 @@ export function DataTable({ columns, data, amountColumn = "amount" }) {
       headers.join(','),
       ...dataRows.map(row => row.join(','))
     ].join('\n');
+
+    
     
     // Create and download CSV file
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', 'expenses.csv');
+    link.setAttribute('download', `${pathname.replace('/', '')}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const pathname = usePathname();
-  console.log("Current Pathname:", pathname); // Debugging line
+ 
 
   return (
     <div>

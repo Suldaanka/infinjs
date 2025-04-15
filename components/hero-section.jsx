@@ -18,7 +18,7 @@ export default function HeroSection() {
         <NavBar/>
           <div className="absolute inset-0">
             <Image
-              src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              src="/public/bg.png"
               alt="Luxury hotel lobby"
               fill
               className="object-cover brightness-50"
