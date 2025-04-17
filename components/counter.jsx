@@ -1,14 +1,30 @@
-"use client" // ✅ Important for client-side component
+"use client"
 
-//import { setUser } from '@/redux/features/user/userSlice';
-//import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useFetch } from '@/hooks/useFetch';
+import { setUser } from '@/redux/features/user/userSlice';
+import { useAuth, useUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
 
 export function Counter() {
-  const user = useSelector((state) => state.user.user); 
+  const { userId, isLoaded: isAuthLoaded } = useAuth();
+  const id = isAuthLoaded ? userId : null;
+
+
+  const { data } = useFetch(
+    id ? `/api/users/${id}` : null, // only fetch if id is available
+    ["user", id]
+  );
+
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data) {
+      dispatch(setUser(data));
+    }
+  }, [data, dispatch]);
+
   return (
-    <div>
-      <span>{user}</span>
-    </div>
+    <></>
   );
 }

@@ -55,6 +55,9 @@ enum RoomStatus {
 model Booking {
   id         String   @id @default(cuid())
   userId     String
+  phoneNumber String?
+  fullName   String
+  guest      String
   user       User     @relation(fields: [userId], references: [id])
   roomId     String
   room       Room     @relation(fields: [roomId], references: [id])

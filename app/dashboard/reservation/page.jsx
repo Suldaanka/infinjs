@@ -5,19 +5,28 @@ import { DataTable } from "../expenses/data-table";
 import { useFetch } from "@/hooks/useFetch";
 import { useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
+import { useSelector } from "react-redux";
+
+import { Addreservation } from "./_components/add";
+import { useAuth } from "@clerk/nextjs";
+
 
 export default function Page() {
   const queryClient = useQueryClient();
   const tableColumns = columns(queryClient);
-
   const { data, isLoading, isError } = useFetch("/api/reservation", ["reservation"]);
 
+
   if (isLoading) return <Loading />;
-  if (isError) return <p>Error fetching reservation</p>;
+  if (isError) return <div>Error loading reservation data</div>;
+  if (!data) return <div>No reservation data found</div>;
+
+  console.log(data);  
 
   return (
     <div>
+      <Addreservation/>
       <DataTable data={data || []} columns={tableColumns} />
     </div>
   );
-}
+} 

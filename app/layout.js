@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/Providers";
+import { Counter } from "@/components/counter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <Providers>
+            <Counter/>
             {children}
           </Providers>
         </ThemeProvider>

@@ -10,19 +10,19 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RoomsForm } from "./roomsForm"
+import { ReservationForm, RoomsForm } from "./reservationForm"
 
-export function Addroom() {
+export function Addreservation() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Room</Button>
+        <Button variant="outline">Add </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add roome</DialogTitle>
+          <DialogTitle>Add reservation</DialogTitle>
         </DialogHeader>
-        <RoomsForm/>
+        <ReservationForm/>
       </DialogContent>
     </Dialog>
   )

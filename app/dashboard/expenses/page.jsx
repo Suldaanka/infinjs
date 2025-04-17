@@ -5,15 +5,14 @@ import { DataTable } from "../expenses/data-table";
 import { useFetch } from "@/hooks/useFetch";
 import { useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/redux/features/user/userSlice";
+import { useSelector } from "react-redux";
 
 export default function Page() {
   const queryClient = useQueryClient();
   const tableColumns = columns(queryClient);
 
   const user = useSelector((state) => state.user.user); // ✅ safe now
-
+  console.log(user);
   const { data, isLoading, isError } = useFetch("/api/expense", ["expenses"]);
 
   if (isLoading) return <Loading />;
@@ -21,7 +20,6 @@ export default function Page() {
 
   return (
     <div>
-      <span>{user}</span>
       <DataTable data={data || []} columns={tableColumns} />
     </div>
   );

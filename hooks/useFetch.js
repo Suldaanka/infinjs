@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-export function useFetch(endpoint, queryKey, options = {}) {
+export function useFetch(endpoint, queryKey, id, options = {}) {
   const fetchData = async () => {
     const res = await fetch(endpoint);
     if (!res.ok) {
@@ -14,6 +14,7 @@ export function useFetch(endpoint, queryKey, options = {}) {
   return useQuery({
     queryKey,
     queryFn: fetchData,
+    id,
     staleTime: 1000 * 60 * 5, // 5 minutes cache
     ...options
   });

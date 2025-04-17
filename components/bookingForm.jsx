@@ -27,6 +27,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useUser } from "@clerk/nextjs"
+import { useMutation } from "@tanstack/react-query"
+import { useMutate } from "@/hooks/useMutate"
+import { useSelector } from "react-redux"
 
 // Define booking schema with proper validation
 const bookingFormSchema = z.object({
@@ -37,8 +40,11 @@ const bookingFormSchema = z.object({
 })
 
 export function BookingForm() {
-    const {user} = useUser()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { mutate } = useMutate('/api/reservation/add', ['reservation']);
+  
+    const user = useSelector((state) => state.user.user);
+  
 
   const form = useForm({
     resolver: zodResolver(bookingFormSchema),
@@ -50,12 +56,12 @@ export function BookingForm() {
 
     },
   })
-
+  
 
   // Handle form submission and database saving
   async function onSubmit(data) {
 
-
+   
     setIsSubmitting(true)
 
     
@@ -65,28 +71,15 @@ export function BookingForm() {
             checkOut: data.checkOut,
             guests: data.guests,
             roomType: data.roomType.toUpperCase(),
+            fullname: user.name,
             user: user.id,
         }
 
         console.log(formData);
 
-        const response =  await fetch("/api/reservation/add",{
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-
         
 
-        if (!response.ok) {
-            throw new Error("Failed to create reservation")
-
-        }
-
-        const result = await response.json()
-        console.log(result)
+        mutate(formData)
         toast.success("Reservation created successfully")
         form.reset()
         setIsSubmitting(false)

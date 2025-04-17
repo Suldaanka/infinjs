@@ -20,8 +20,8 @@ import { Badge } from "@/components/ui/badge";
 
 export   const columns  = (queryClient) => [
   
-  { accessorKey: "userId", header: "User Id" },
-  { accessorKey: "roomId", header: "Room Id" },
+  { accessorKey: "fullName", header: "Full Name" },
+  { accessorKey: "room", header: "room" },
   { accessorKey: "checkIn", header: "checkIn" },
   { accessorKey: "checkOut", header: "checkOut" },
   { 

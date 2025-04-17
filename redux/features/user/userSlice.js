@@ -1,9 +1,13 @@
+"use client";
+
 import { createSlice } from '@reduxjs/toolkit';
 
+
 export const userSlice = createSlice({
+  
   name: 'user',
   initialState: {
-    user: "kaafi",
+    user: null
   },
   reducers: {
     setUser: (state, action) => {
