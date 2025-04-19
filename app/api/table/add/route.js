@@ -20,7 +20,7 @@ export async function POST(req) {
             data: {
                 number, 
                 capacity,
-                status, 
+                status: status.toUpperCase(),
                 createdAt: new Date(),
             },
         });

@@ -20,8 +20,8 @@ export async function POST(req) {
             data: {
                 number, 
                 price: parseFloat(price),
-                status, 
-                type,
+                status: status.toUpperCase(), 
+                type: type.toUpperCase(),
                 createdAt: new Date(),
             },
         });

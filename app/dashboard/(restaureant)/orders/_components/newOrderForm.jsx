@@ -15,55 +15,48 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { useMutate } from "@/hooks/useMutate"
-
 const FormSchema = z.object({
-    number: z.coerce.number().min(2, {
-        message: "Must be a valid room number",
-      }),
-      price: z.coerce.number().min(2, {
-        message: "Must be a valid room price",
-      }),
-    type: z.enum(["single", "double", "suite"], {
-        message: "Must right room type",
-    }),
-    status: z.enum(["available", "booked", "cleaning"], {
-        message: "Must right room status",
-    }),
+  number: z.coerce.number().min(1, {
+    message: "Must be a valid room number",
+  }),
+  capacity: z.coerce.number().min(2, {
+    message: "Must write valid capacity",
+  }),
+  status: z.enum(["available", "booked", "cleaning"], {
+    message: "Must right room status",
+  }),
 })
 
-export function RoomsForm() {
+export function OrderForm() {
+
+  
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       number: 0,
-      price: 0,
-      type: "",
+      capacity: 0,
       status: "",
     },
   })
 
-  const { mutate } = useMutate("/api/rooms/add", ["rooms"])
-
+  const {mutate} = useMutate('/api/table/add', ['tables']);
   function onSubmit(data) {
     mutate(data)
-    if(mutate.isSuccess) {
-      toast("Room Created Successfully")
-    }
-  
-      console.log(data)
+    toast("Table Created Successfully")
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Number </FormLabel>
+              <FormLabel>Number</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -73,10 +66,10 @@ export function RoomsForm() {
         />
          <FormField
           control={form.control}
-          name="price"
+          name="capacity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price </FormLabel>
+              <FormLabel>Capacity </FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -84,32 +77,29 @@ export function RoomsForm() {
             </FormItem>
           )}
         />
-         <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type </FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-         <FormField
+        <FormField
           control={form.control}
           name="status"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Staus </FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
+            <FormItem className={""}>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value} className="bg-green-500">
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="occupied">Occupied</SelectItem>
+                  <SelectItem value="reserved">Reserved</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>

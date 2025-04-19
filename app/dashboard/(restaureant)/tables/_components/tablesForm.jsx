@@ -19,10 +19,10 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Input } from "@/components/ui/input"
 import { useMutate } from "@/hooks/useMutate"
 const FormSchema = z.object({
-  number: z.coerce.number().min(2, {
+  number: z.coerce.number().min(1, {
     message: "Must be a valid room number",
   }),
-  Capacity: z.coerce.number().min(2, {
+  capacity: z.coerce.number().min(2, {
     message: "Must write valid capacity",
   }),
   status: z.enum(["available", "booked", "cleaning"], {
@@ -66,7 +66,7 @@ export function RoomsForm() {
         />
          <FormField
           control={form.control}
-          name="Capacity"
+          name="capacity"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Capacity </FormLabel>

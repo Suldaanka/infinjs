@@ -12,7 +12,6 @@ export default function page() {
   if (isError) return <p>Error fetching tables</p>
   return (
     <div>
-      <h1>Tables</h1>
       <AddTable/>
       <TableCard data={data} />
     </div>

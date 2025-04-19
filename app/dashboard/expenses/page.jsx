@@ -11,8 +11,6 @@ export default function Page() {
   const queryClient = useQueryClient();
   const tableColumns = columns(queryClient);
 
-  const user = useSelector((state) => state.user.user); // ✅ safe now
-  console.log(user);
   const { data, isLoading, isError } = useFetch("/api/expense", ["expenses"]);
 
   if (isLoading) return <Loading />;
