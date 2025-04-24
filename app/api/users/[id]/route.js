@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request, { params }) {
-
+export async function GET(request, context) {
+    const params = await context.params;
     const userId = params.id;
+    
     try {
         const User = await prisma.user.findUnique({where: {clerkId: userId}})
         if (!User) {

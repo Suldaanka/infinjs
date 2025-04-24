@@ -13,11 +13,18 @@ import {
 import { AppSidebar } from '../../components/app-sidebar'
 import { usePathname } from 'next/navigation'
 import { ModeToggle } from '@/components/ModeToggle'
+import { useSelector } from 'react-redux'
 export default function layout({children}) {
-  //const isAdmin = await checkRole('admin')
-  /* if (!isAdmin) {
-    redirect('/')
+  const user = useSelector((state) => state.user.user);
+
+ 
+
+/*   console.log("userdata",user)
+
+  if (user?.role !== "ADMIN") {
+    redirect("/"); 
   } */
+
 
     const [pathname, setPathname] = React.useState('')
     const path = usePathname()

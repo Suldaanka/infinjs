@@ -4,11 +4,22 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { useUser, getC, UserButton } from "@clerk/nextjs";
+import landinpageContent from "@/constants/landinpageContent";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
+import { setLanguage, toggleLanguage } from '@/redux/features/initialLanguage/langSlice';
+import Image from "next/image";
+import soflag from "/public/so.svg";
+import enflag from "/public/en.svg";
+
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Close mobile menu when screen size changes to desktop
+  
+  
+  const dispatch = useDispatch();
+  const language = useSelector((state) => state.language.current);
+  console.log(language, "language from redux store");
+    
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -32,6 +43,16 @@ export default function NavBar() {
       document.body.style.overflow = "auto";
     };
   }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    if (savedLanguage && savedLanguage !== language) {
+      dispatch(setLanguage(savedLanguage));
+    } else if (!savedLanguage) {
+      // If no language is saved yet, save the default
+      localStorage.setItem('language', language);
+    }
+  }, []);
 
   const scrollToSection = (e, id) => {
     e.preventDefault();
@@ -79,6 +100,11 @@ export default function NavBar() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-4">
+            <button 
+              onClick={() => dispatch(toggleLanguage())}
+            > 
+              <Image alt={language} width={30} height={30} src={language === "en" ? enflag : soflag} />
+            </button>
             <ModeToggle />
             {isSignedIn ? (<UserButton />) : (
               <button className="hidden md:flex px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">
