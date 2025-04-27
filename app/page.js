@@ -28,7 +28,7 @@ export default function Home() {
       <Rooms content={content.roomsSection} />
       <Amenities content={content.HotelAmenities} />
       <Gallery content={content.HotelGallery} />
-      <Testimonial content={content.Testimonial} />
+      <Testimonial content={content.Testimonials} />
       <Contact content={content.Contact} />
       <FooterSection content={content.FooterSection} />
     </>

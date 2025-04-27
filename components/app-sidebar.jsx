@@ -20,15 +20,11 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavUser } from "./nav-user"
+import { useSelector } from "react-redux"
 
 
-// This is sample data.
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -107,6 +103,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }) {
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -117,7 +114,7 @@ export function AppSidebar({ ...props }) {
         
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser/>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

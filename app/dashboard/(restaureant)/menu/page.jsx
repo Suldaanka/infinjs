@@ -33,11 +33,7 @@ export default function Page() {
 
   return (
     <div>
-      <AddMenuItem/>
-      <div className="flex justify-end">
-      </div>
       <MenuCard menuItems={menuItem}/>
-      
     </div>
   );
 }

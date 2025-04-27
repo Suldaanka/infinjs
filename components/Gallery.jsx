@@ -11,8 +11,8 @@ const galleryImages = [
   },
   {
     src: '/imgs/hall02.jpg',
-    alt: 'Hotel suite',
-    label: 'Suite',
+    alt: 'Wedding Hall',
+    label: 'Wedding Hall',
   },
   {
     src: '/imgs/restView.jpg',
@@ -21,28 +21,28 @@ const galleryImages = [
   },
   {
     src: '/imgs/rest.jpg',
-    alt: 'Pool',
-    label: 'Pool',
+    alt: 'Restaurent',
+    label: 'Restaurent',
   },
   {
     src: '/imgs/rest02.jpg',
-    alt: 'Spa',
-    label: 'Spa',
+    alt: 'Coffee',
+    label: 'Coffee',
   },
   {
-    src: 'https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg',
-    alt: 'Gym',
-    label: 'Gym',
+    src: '/imgs/single.jpg',
+    alt: 'Single Room',
+    label: 'Single Room',
   },
   {
-    src: 'https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg',
-    alt: 'Bar',
-    label: 'Bar',
+    src: '/imgs/double.jpg',
+    alt: 'Double Room',
+    label: 'double Room',
   },
   {
-    src: 'https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg',
-    alt: 'Exterior',
-    label: 'Exterior',
+    src: '/imgs/family.jpg',
+    alt: 'Family Room',
+    label: 'Family Room',
   },
 ]
 

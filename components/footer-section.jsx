@@ -25,8 +25,9 @@ export default function FooterSection() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
+      className=''
     >
-      <footer className="bg-gray-900 dark:bg-gray-950 py-12 text-gray-300">
+      <footer className="bg-gray-900 dark:bg-gray-950 py-12 text-gray-300 px-2">
         <div className="container mx-auto">
           <div className="grid gap-8 md:grid-cols-4">
             <div>

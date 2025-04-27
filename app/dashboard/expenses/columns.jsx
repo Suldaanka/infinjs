@@ -1,7 +1,6 @@
-"use client"
-import { MoreHorizontal } from "lucide-react"
- 
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,63 +8,65 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { queryClient } from "@tanstack/react-query";
+} from "@/components/ui/dropdown-menu";
+import { Update } from "./_components/update";
 
 
-
-
-
-
-export   const columns  = (queryClient) => [
-  
+export const columns = (queryClient) => [
   { accessorKey: "description", header: "Description" },
   { accessorKey: "categoryName", header: "Category" },
   { accessorKey: "amount", header: "Amount" },
   { accessorKey: "date", header: "Date" },
   {
-    accessorKey: "actions", header: "Actions",
+    accessorKey: "actions",
+    header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const expenses = row.original
-
-      const id = row.original.id;
+      const [open, setOpen] = useState(false); // <-- control dialog open state
+      const expenses = row.original;
+      const id = expenses.id;
 
       const handleDelete = async () => {
-        const res = await fetch(`/api/expense/delete/${id}`, {
-          method: "DELETE",
-        });
-
+        const res = await fetch(`/api/expense/delete/${id}`, { method: "DELETE" });
         const data = await res.json();
-
         if (res.ok) {
           queryClient.invalidateQueries({ queryKey: ["expenses"] });
         } else {
           alert(data.error || "Failed to delete");
         }
       };
- 
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View</DropdownMenuItem>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => handleDelete(expenses.id)}
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+        <>
+          <div className="flex flex-row">
+          <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="ghost" className="h-8 w-8 p-0">
+      <span className="sr-only">Open menu</span>
+      <MoreHorizontal className="h-4 w-4" />
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+    <DropdownMenuItem onClick={() => setOpen(true)}>
+      Edit
+    </DropdownMenuItem>
+    <div>
+    {open && (
+      <Update open={open} setOpen={setOpen} expenses={expenses} />
+    )}
+    </div>
+    <DropdownMenuSeparator />
+    
+    <DropdownMenuItem onClick={() => handleDelete(id)}>
+      Delete
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu> 
+          </div>
+        </>
+      );
     },
   },
 ];

@@ -20,6 +20,7 @@
 # production
 /build
 /public/uploads
+/prisma/migrations
 
 # misc
 .DS_Store

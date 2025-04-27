@@ -75,7 +75,7 @@ const landingPageContent = {
           },
           {
             title: "Hall",
-            icon: "/imgs/24w.svg",
+            icon: "/imgs/love.svg",
             description:
               "Host your events in our spacious and well-equipped hall, perfect for conferences, weddings, and gatherings.",
           },
@@ -88,15 +88,20 @@ const landingPageContent = {
           "Explore our stunning hotel through our gallery, showcasing the elegance and beauty of Iftin Hotel.",
       },
 
-      GuestTestimonials: {
+      Testimonials: {
         title: "What Our Guests Say",
         description:
           "Don't just take our word for it. Hear from our satisfied guests about their experiences at Iftin Hotel.",
-        testimonials: [
+        testimonial: [
           {
             name: "John Doe",
             review:
               "I had an amazing stay at Iftin Hotel! The staff was incredibly friendly, and the room was beautiful. Highly recommend!",
+          },
+          {
+            name: "Jane Smith",
+            review:
+              "The location is perfect, and the amenities are top-notch. I will definitely be coming back!",
           },
           {
             name: "Jane Smith",
@@ -189,7 +194,7 @@ const landingPageContent = {
             title: "Hoolka Shirarka & Aroosyada",
             description:
               "Ku qabso xafladahaaga iyo shirarkaaga hoolkayaga ballaaran ee casriga ah.",
-              icon: "Hall"
+              icon: "/imgs/love.svg"
           },
         ],
       },
@@ -198,15 +203,20 @@ const landingPageContent = {
         description:
           "Daawo quruxda Hoteelka Iftin adigoo ka dhex arkaya gallery-ga sawirrada.",
       },
-      GuestTestimonials: {
+      Testimonials: {
         title: "Waxa ay martidayadu ka sheegaan",
         description:
           "Akhriso fikirka martidayada si aad u ogaato khibradooda ay nala yeesheen.",
-        testimonials: [
+        testimonial: [
           {
             name: "John Doe",
             review:
               "Waxaan ku raaxaystay joogitaanka Hoteelka Iftin! Shaqaaluhu aad buu u naxariis badan yahay, qolkuna wuxuu ahaa mid qurux badan.",
+          },
+          {
+            name: "Jane Smith",
+            review:
+              "Meesha aad bay ugu habboon tahay, adeegyaduna waa heer sare. Mar kale ayaan iman doonaa!",
           },
           {
             name: "Jane Smith",
