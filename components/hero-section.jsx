@@ -12,7 +12,7 @@ import { BookingForm } from './bookingForm'
 
 export default function HeroSection({ content }) {
   return (
-    <div>
+    <div className=''>
       <section id="home" className="relative">
         <NavBar />
         <div className="absolute inset-0">
@@ -25,7 +25,7 @@ export default function HeroSection({ content }) {
           />
         </div>
         <div className="container mx-auto relative z-10 py-24 md:py-32 flex items-center justify-center">
-          <div className="flex flex-col items-center mt-5">
+          <div className="flex flex-col items-center mt-5 px-2">
 
             {/* Animated title and description */}
             <motion.div

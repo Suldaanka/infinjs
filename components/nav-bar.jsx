@@ -18,7 +18,6 @@ export default function NavBar() {
   
   const dispatch = useDispatch();
   const language = useSelector((state) => state.language.current);
-  console.log(language, "language from redux store");
     
   useEffect(() => {
     const handleResize = () => {

@@ -47,7 +47,6 @@ const galleryImages = [
 ]
 
 export default function Gallery({content}) {
-  console.log(content)
   return (
     <section id="gallery" className="bg-muted py-16">
       <div className="container mx-auto px-4">

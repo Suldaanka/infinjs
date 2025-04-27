@@ -11,7 +11,7 @@ export default function Testimonial({content}) {
   return (
     <div className='container mx-auto'>
       <section id="testimonials" className="bg-background py-16">
-        <div className="container">
+        <div className="container px-2">
           <motion.div
             className="mx-auto max-w-3xl text-center"
             initial={{ opacity: 0, y: 40 }}

@@ -5,7 +5,7 @@ import { setRoom } from '@/redux/features/room/roomSlice';
 import { setUser } from '@/redux/features/user/userSlice';
 import { useAuth, useUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function Counter() {
   const { userId, isLoaded: isAuthLoaded } = useAuth();
@@ -26,8 +26,8 @@ export function Counter() {
       dispatch(setRoom(rooms));
     }
   }, [user, rooms, dispatch]);
-  
-  console.log(user, rooms);
+    
+ 
   
   return (
     <></>

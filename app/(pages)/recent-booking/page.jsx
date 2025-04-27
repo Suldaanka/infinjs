@@ -81,9 +81,9 @@ export default function RecentBooking() {
     });
   }
 
-  const RoomNumber = roomNumberMap[booking.roomId]
-  
-  console.log(RoomNumber);
+  const hundleCancel = (id)=>{
+        console.log(id);
+  }
 
 
   return (
@@ -93,7 +93,7 @@ export default function RecentBooking() {
       </div>
         <div className="w-full md:w-3/4 lg:w-2/3 mx-auto mt-20 px-4">
         <h1 className="text-xxlg">Recent Booking</h1>
-          <div className="bg-white h-[100vh] overflow-hidden">
+          <div className="bg-white">
 
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
@@ -187,11 +187,8 @@ export default function RecentBooking() {
                           
                           <div className="mt-6 pt-3 border-t border-gray-100 flex justify-end items-center">
                             <div className="flex space-x-3">
-                              <button className="px-4 py-2 border border-amber-600 text-amber-600 rounded-md hover:bg-amber-50 transition-colors">
-                                View Details
-                              </button>
                               {booking.status !== 'cancelled' && !past && (
-                                <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                                <button onClick={()=> hundleCancel(booking.id)} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
                                   Cancel
                                 </button>
                               )}

@@ -8,7 +8,7 @@ export default function AboutSection({ content }) {
   return (
     <div className='container mx-auto'>
       <section className="bg-background py-16">
-        <div className="container">
+        <div className="container px-2">
 
           {/* Heading */}
           <motion.div

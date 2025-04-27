@@ -62,7 +62,7 @@ export function ReservationForm() {
   })
   
   const { mutate } = useMutate('/api/reservation/add', ['reservation']);
-   const user = useSelector((state) => state.user.user); // ✅ safe now
+   const user = useSelector((state) => state.user.user);
     console.log(user);
   function onSubmit(data) {
     const newData = {

@@ -8,7 +8,7 @@ export default function Amenities({ content }) {
   return (
     <div className='container mx-auto'>
       <section id="amenities" className="bg-background py-16">
-        <div className="container">
+        <div className="container px-2">
           
           {/* Section Heading */}
           <motion.div

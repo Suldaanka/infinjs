@@ -27,7 +27,7 @@ export default function Contact() {
       variants={fadeUp}
     >
       <section id="contact" className="bg-gray-900 dark:bg-gray-950 py-16 text-white">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-2">
           <div className="grid gap-12 md:grid-cols-2">
             {/* Left Info Block */}
             <motion.div variants={fadeUp}>
