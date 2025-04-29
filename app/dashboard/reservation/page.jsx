@@ -24,15 +24,24 @@ export default function Page() {
     roomNumberMap[room.id] = room.number;
   });
 
+  const updatedReservations = data.map((reservation) => {
+    // Create a safe date formatting function
+    const formatDate = (dateString) => {
+      try {
+        const date = new Date(dateString);
+        return isNaN(date.getTime()) ? "Invalid Date" : date.toLocaleString();
+      } catch (e) {
+        return "Invalid Date";
+      }
+    };
 
-
-  
-  const updatedReservations = data.map((reservation) => ({
-    ...reservation,
-    roomNumber: roomNumberMap[reservation.roomId] || "Unknown", // fallback if no match
-  }));
-
-
+    return {
+      ...reservation,
+      checkIn: formatDate(reservation.checkIn),
+      checkOut: formatDate(reservation.checkOut),
+      roomNumber: roomNumberMap[reservation.roomId] || "Unknown",
+    };
+  });
 
   return (
     <div>

@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { DataTable } from "../../expenses/data-table";
 import OrderCardList from "./_components/OrderCardList";
+import { NewOrder } from "./_components/newOrder";
 
 
 
@@ -22,6 +23,7 @@ export default function Page() {
 
   return (
     <div>
+      <NewOrder/>
       <OrderCardList data={data.orders}/>
     </div>
   );
