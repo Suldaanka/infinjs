@@ -174,16 +174,13 @@ export function Add() {
                                             <SelectContent>
 
                                                 {
-                                                    categories.length > 0 ? (
+                                                   
                                                         categories.map((category) => (
                                                             <SelectItem key={category.id} value={category.id}>
                                                                 {category.name}
                                                             </SelectItem>
                                                         ))
-                                                    ) : (
-                                                        <SelectItem disabled>No categories available</SelectItem>
-
-                                                    )
+                                                    
                                                 }
 
                                                 <div>

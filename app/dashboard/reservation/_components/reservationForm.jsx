@@ -69,11 +69,9 @@ export function ReservationForm() {
       user: user.id,
       ...data
     }
-    toast("Reservation submitted!", {
-      description: `Name: ${data.fullname}, Check-in: ${data.checkIn}, Check-out: ${data.checkOut}`,
-    });
+ 
     
-    // Log the complete data to console
+   // Log the complete data to console
     console.log("Form data:", data);
    mutate(newData, {
       onSuccess: () => {

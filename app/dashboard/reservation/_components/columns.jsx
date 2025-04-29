@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { queryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
+import { Update } from "./update";
 
 
 
@@ -31,19 +32,19 @@ export   const columns  = (queryClient) => [
     accessorKey: "actions", header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const expenses = row.original
+      const reservation = row.original
 
       const id = row.original.id;
 
       const handleDelete = async () => {
-        const res = await fetch(`/api/expense/delete/${id}`, {
+        const res = await fetch(`/api/reservation/delete/${id}`, {
           method: "DELETE",
         });
 
         const data = await res.json();
 
         if (res.ok) {
-          queryClient.invalidateQueries({ queryKey: ["expenses"] });
+          queryClient.invalidateQueries({ queryKey: ["reservation"] });
         } else {
           alert(data.error || "Failed to delete");
         }
@@ -59,11 +60,10 @@ export   const columns  = (queryClient) => [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View</DropdownMenuItem>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <Update reservation={reservation}/>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => handleDelete(expenses.id)}
+              onClick={() => handleDelete(reservation.id)}
             >
               Delete
             </DropdownMenuItem>

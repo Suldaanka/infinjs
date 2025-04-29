@@ -16,7 +16,7 @@ export function Counter() {
     ["user", id]
   );
   
-  const { data: rooms } = useFetch('/api/rooms/');
+  const { data: rooms } = useFetch('/api/rooms/', ['rooms']);
   
   const dispatch = useDispatch();
   useEffect(() => {

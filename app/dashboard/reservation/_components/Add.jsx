@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ReservationForm, RoomsForm } from "./reservationForm"
+import { ReservationForm,} from "./reservationForm"
 
 export function Addreservation() {
   return (

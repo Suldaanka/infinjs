@@ -48,15 +48,11 @@ export const columns = (queryClient) => [
   </DropdownMenuTrigger>
   <DropdownMenuContent align="end">
     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-    <DropdownMenuItem onClick={() => setOpen(true)}>
-      Edit
-    </DropdownMenuItem>
     <div>
-    {open && (
-      <Update open={open} setOpen={setOpen} expenses={expenses} />
-    )}
-    </div>
+ 
+      <Update expenses={expenses} />
+   </div>
+
     <DropdownMenuSeparator />
     
     <DropdownMenuItem onClick={() => handleDelete(id)}>

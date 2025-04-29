@@ -18,10 +18,12 @@ export function useMutate(endpoint, queryKey, options = {}) {
         return res.json();
     };
 
+
+
     const mutation = useMutation({
         mutationFn,
-        onSuccess: () => queryClient.invalidateQueries(queryKey),
-        ...mutationOptions // Spread other mutation options
+        onSuccess: () => queryClient.invalidateQueries({ queryKey}),
+        ...mutationOptions
     });
 
     return {
