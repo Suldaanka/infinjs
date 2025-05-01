@@ -3,10 +3,45 @@
 import React, { useEffect, useState } from "react";
 import MenuCard from "./_components/menuCard";
 import { AddMenuItem } from "./_components/addMenuItem";
+import Orderside from "./_components/Orderside";
+
+
 
 
 export default function Page() {
   const [menuItem, setMenuItem] = useState([]);
+
+  const [orderItems, setOrderItems] = useState([]);
+
+  const handleAddToOrder = (newItem) => {
+    setOrderItems((prev) => {
+      const exists = prev.find(i => i.id === newItem.id);
+      if (exists) {
+        return prev.map(i =>
+          i.id === newItem.id ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      }
+      return [...prev, newItem];
+    });
+  };
+
+  const updateQuantity = (id, qty) => {
+    if (qty <= 0) {
+      setOrderItems(items => items.filter(item => item.id !== id));
+    } else {
+      setOrderItems(items =>
+        items.map(item =>
+          item.id === id ? { ...item, quantity: qty } : item
+        )
+      );
+    }
+  };
+
+  const removeItem = (id) => {
+    setOrderItems(items => items.filter(item => item.id !== id));
+  };
+
+  console.log(orderItems)
 
   async function getData(){
     const url = "/api/menu";
@@ -32,8 +67,17 @@ export default function Page() {
   
 
   return (
-    <div>
-      <MenuCard menuItems={menuItem}/>
+    <div className="flex gap-4">
+    <div className="flex-1">
+      <MenuCard menuItems={menuItem} onAddToOrder={handleAddToOrder} />
     </div>
+    <div className="w-1/3 h-[calc(100%-h-16)]">
+    <Orderside
+        orderItems={orderItems}
+        onUpdateQuantity={updateQuantity}
+        onRemove={removeItem}
+      />
+    </div>
+  </div>
   );
 }

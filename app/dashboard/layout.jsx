@@ -41,10 +41,8 @@ export default function layout({children}) {
         })
       }
     }, [path])
-
-  
-
   return (
+    <div className='flex flex-row'>
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
@@ -57,10 +55,11 @@ export default function layout({children}) {
           <SignOutButton />
           <ModeToggle />
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex  flex-col gap-4 p-4 pt-0">
             {children}
         </div>
       </SidebarInset>
     </SidebarProvider>
+    </div>
   )
 }

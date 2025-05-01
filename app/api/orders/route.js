@@ -6,7 +6,7 @@ export async function GET() {
         await prisma.$connect();
         const orders = await prisma.order.findMany();
 
-        return NextResponse.json({ orders }, { status: 200 });
+        return NextResponse.json( orders , { status: 200 });
     } catch (error) {
         return NextResponse.json(
             { error: "Something went wrong" },

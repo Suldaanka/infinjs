@@ -63,8 +63,8 @@ export function Update({ reservation }) {
     defaultValues: {
       fullname: reservation?.fullName || '',
       phone: reservation?.phoneNumber || '',
-      checkIn: reservation?.checkIn || '',
-      checkOut: reservation?.checkOut || '',
+      checkIn:  '',
+      checkOut:  '',
       guests: reservation?.guests?.toString() || '',
       roomType: reservation?.roomType?.toLowerCase() || '',
       status: reservation?.status?.toUpperCase() || '',

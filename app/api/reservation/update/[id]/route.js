@@ -33,13 +33,6 @@ export async function PUT(request, { params }) {
       updateData.phoneNumber = data.phone;
     }
     
-    if (data.checkIn !== undefined) {
-      updateData.checkIn = data.checkIn;
-    }
-    
-    if (data.checkOut !== undefined) {
-      updateData.checkOut = data.checkOut;
-    }
     
     if (data.guest !== undefined) {
       updateData.guests = parseInt(data.guest, 10);
