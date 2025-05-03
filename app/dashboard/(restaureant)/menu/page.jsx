@@ -41,7 +41,6 @@ export default function Page() {
     setOrderItems(items => items.filter(item => item.id !== id));
   };
 
-  console.log(orderItems)
 
   async function getData(){
     const url = "/api/menu";
@@ -70,13 +69,6 @@ export default function Page() {
     <div className="flex gap-4">
     <div className="flex-1">
       <MenuCard menuItems={menuItem} onAddToOrder={handleAddToOrder} />
-    </div>
-    <div className="w-1/3 h-[calc(100%-h-16)]">
-    <Orderside
-        orderItems={orderItems}
-        onUpdateQuantity={updateQuantity}
-        onRemove={removeItem}
-      />
     </div>
   </div>
   );

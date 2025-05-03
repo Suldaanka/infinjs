@@ -2,11 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { addItem } from "@/redux/features/order/orderSlice";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 export default function MenuCard({ menuItems, onAddToOrder }) {
+
+  const dispatch = useDispatch()
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       {menuItems && menuItems.map((item) => {
@@ -58,7 +62,7 @@ export default function MenuCard({ menuItems, onAddToOrder }) {
 
               <Button
                 className="mt-4 w-full"
-                onClick={() => onAddToOrder({ ...item, quantity: 1 })}
+                onClick={() => dispatch(addItem(item, item.id))}
                 disabled={item.status !== "AVAILABLE"}
               >
                 Add to Order
