@@ -2,7 +2,7 @@
 
 import { ClerkProvider } from '@clerk/nextjs';
 import { Provider } from 'react-redux';
-import { store } from '@/redux/stote';
+import { store } from '@/redux/stote.js';
 import { Toaster } from 'sonner';
 import { QueryProvider } from '@/components/QueryProvider';
 import { Counter } from '@/components/counter';

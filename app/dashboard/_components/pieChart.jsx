@@ -17,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { useFetch } from "@/hooks/useFetch"
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -61,6 +62,17 @@ const chartColors = [
 ]
 
 export function PiChart() {
+  const {data, isLoading} = useFetch('/api/revenue/expenses', ['expenses']);
+
+  const chartData = [
+    { 
+      category: data.category, 
+      amount: data.amount, 
+      fill: "var(--color-chrome)" 
+    },
+  ]
+
+  console.log(data)
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -79,8 +91,8 @@ export function PiChart() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="amount"
+              nameKey="category"
               innerRadius={60}
               strokeWidth={5}
               activeIndex={0}

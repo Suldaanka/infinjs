@@ -1,21 +1,29 @@
 "use client";
 
 import { useState } from "react";
+
+
+
+import { useSelector } from "react-redux";
+
+
+
+
+
+import landingPageContent from "@/constants/landinpageContent";
 import AboutSection from "@/components/about-section";
 import Amenities from "@/components/Amenities";
-import FooterSection from "@/components/footer-section";
-import Gallery from "@/components/Gallery";
 import HeroSection from "@/components/hero-section";
 import Rooms from "@/components/room-section";
+import Gallery from "@/components/Gallery";
 import Testimonial from "@/components/testimonial";
-import landinpageContent from "@/constants/landinpageContent";
-import { useSelector } from "react-redux";
 import Contact from "@/components/contact-section";
+import FooterSection from "@/components/footer-section";
 
 
 export default function Home() {
   const language = useSelector(state => state.language.current);
-  const content = landinpageContent[language][0];
+  const content = landingPageContent[language][0];
  
   return (
     <>
@@ -23,10 +31,10 @@ export default function Home() {
       
       
       {/* Pass the appropriate content to each component */}
-      <HeroSection content={content.HeroSection} />
-      <AboutSection content={content.AboutSection} />
+      <HeroSection content={content.HeroSection}/>
+      <AboutSection content={content.AboutSection}/>
       <Rooms content={content.roomsSection} />
-      <Amenities content={content.HotelAmenities} />
+      <Amenities  content={content.HotelAmenities}/>
       <Gallery content={content.HotelGallery} />
       <Testimonial content={content.Testimonials} />
       <Contact content={content.Contact} />

@@ -7,13 +7,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OrderDetails } from "./orderdetails";
+import { useSelector } from "react-redux";
+import { Eye, XCircle } from "lucide-react";
+import OrderRecipt from "./orderRecipt";
 
 export default function OrderCardList({ data = [] }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   // Client-side state for dates to prevent hydration mismatch
   const [isClient, setIsClient] = useState(false);
-
+  const tables = useSelector((state) => state.table.table);
+  const rooms = useSelector((state) => state.room.room);
   // Set isClient to true after component mounts on client
   useEffect(() => {
     setIsClient(true);
@@ -33,13 +37,15 @@ export default function OrderCardList({ data = [] }) {
   };
 
   // Navigate to order items page
-
+  const orderView = (id) => {
+    router.push(`/dashboard/orders/${id}`)
+  }
 
   // Format date safely, only on client-side
   const formatDate = (dateString) => {
     if (!dateString) return "";
     if (!isClient) return ""; // Return empty on server to avoid hydration mismatch
-    
+
     try {
       return new Date(dateString).toLocaleString();
     } catch (error) {
@@ -55,6 +61,20 @@ export default function OrderCardList({ data = [] }) {
       </div>
     );
   }
+
+
+
+  console.log("Tables Dta", tables, rooms)
+  const getTableNumber = (id) => {
+    const table = tables.find((t) => t.id === id);
+    return table?.number || id;
+  };
+
+  const getRoomNumber = (id) => {
+    const room = rooms.find((r) => r.id === id);
+    return room?.number || id;
+  };
+
 
   return (
     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -76,10 +96,10 @@ export default function OrderCardList({ data = [] }) {
                   order?.status === "PENDING"
                     ? "default"
                     : order?.status === "IN_PROGRESS"
-                    ? "secondary"
-                    : order?.status === "SERVED"
-                    ? "success"
-                    : "destructive"
+                      ? "secondary"
+                      : order?.status === "SERVED"
+                        ? "success"
+                        : "destructive"
                 }
               >
                 {order?.status || "UNKNOWN"}
@@ -94,13 +114,13 @@ export default function OrderCardList({ data = [] }) {
             {order?.roomId && (
               <div className="flex items-center justify-between">
                 <span>Room:</span>
-                <span>{order.roomId}</span>
+                <span>0{getRoomNumber(order.roomId)}</span>
               </div>
             )}
             {order?.tableId && (
               <div className="flex items-center justify-between">
                 <span>Table:</span>
-                <span>{order.tableId}</span>
+                <span>0{getTableNumber(order.tableId)}</span>
               </div>
             )}
             <div className="flex flex-col gap-2 mt-4">
@@ -122,17 +142,31 @@ export default function OrderCardList({ data = [] }) {
                     Mark Served
                   </Button>
                 )}
-                <Button
-                  variant="destructive"
-                  onClick={() => order?.id && updateOrderStatus(order.id, "CANCELLED")}
-                  disabled={!order?.id}
-                >
-                  Cancel
-                </Button>
+                <div className="flex items-center justify-between mt-4">
+                  {/* Cancel Order Icon */}
+                  {
+                    order?.status === "PENDING" ? (
+                      <XCircle
+                        className="text-red-500 cursor-pointer hover:scale-105 transition"
+                        size={22}
+                        onClick={() => order?.id && updateOrderStatus(order.id, "CANCELLED")}
+                      />
+                    ) : null
+                  }
+
+
+                  {/* View Order Icon */}
+                  <Eye
+                    className="text-blue-500 cursor-pointer hover:scale-105 transition"
+                    size={22}
+                    onClick={() => orderView(order.id)}
+                  />
+                  <OrderRecipt/>
+                </div>
+
               </div>
-              
-              {/* View items button */}
-                <OrderDetails id={order.id}/>
+
+
             </div>
           </CardContent>
         </Card>

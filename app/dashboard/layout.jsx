@@ -1,8 +1,8 @@
 "use client"
 
-import { redirect } from 'next/navigation'
+import React from 'react'
+import { redirect, usePathname, useRouter } from 'next/navigation'
 import { SignOutButton } from '@clerk/nextjs'
-import React, { use } from 'react'
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -10,51 +10,41 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { AppSidebar } from '../../components/app-sidebar'
-import { usePathname } from 'next/navigation'
 import { ModeToggle } from '@/components/ModeToggle'
 import { useSelector } from 'react-redux'
 import Orderside from './(restaureant)/menu/_components/Orderside'
-
+import { ArrowLeft } from 'lucide-react'
 
 export default function Layout({ children }) {
   const user = useSelector((state) => state.user.user);
-
-  // Sample order items data - replace with your actual Redux state
-  const [orderItems, setOrderItems] = React.useState([
-    { id: 1, name: "Burger", price: 9.99, quantity: 2 },
-    { id: 2, name: "Fries", price: 3.99, quantity: 1 }
-  ]);
-
-  // Order item handlers
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity <= 0) {
-      removeItem(id);
-      return;
-    }
-    setOrderItems(orderItems.map(item =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
-  };
-
-  const removeItem = (id) => {
-    setOrderItems(orderItems.filter(item => item.id !== id));
-  };
-
-  const [pathname, setPathname] = React.useState('')
   const path = usePathname()
+  const router = useRouter()
+  const [pageTitle, setPageTitle] = React.useState('')
 
   React.useEffect(() => {
     if (path) {
-      const segments = path.split('/')
-      segments.forEach((item) => {
-        if (item !== '') {
-          setPathname(item.charAt(0).toUpperCase() + item.slice(1))
-        } else {
-          setPathname(item)
-        }
-      })
+      const segments = path.split('/').filter(Boolean)
+
+      // Handle specific dynamic route like order detail
+      if (
+        segments.length >= 2 &&
+        segments[segments.length - 2] === "orders" &&
+        segments[segments.length - 1].length > 10
+      ) {
+        setPageTitle(
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Order Details
+          </button>
+        )
+      } else {
+        const last = segments[segments.length - 1]
+        setPageTitle(last.charAt(0).toUpperCase() + last.slice(1))
+      }
     }
-  }, [path])
+  }, [path, router])
 
   return (
     <div className='flex flex-col h-screen'>
@@ -67,31 +57,27 @@ export default function Layout({ children }) {
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
               </div>
-              <span className="flex-1">{pathname}</span>
+              <div className="flex-1">{pageTitle}</div>
               <div className="flex items-center gap-2 px-4">
                 <SignOutButton />
                 <ModeToggle />
               </div>
             </header>
+
             <div className="flex flex-1 overflow-hidden">
               <div className="flex-1 overflow-auto p-4">
                 {children}
               </div>
             </div>
-            
           </SidebarInset>
-          {
-            pathname === 'Menu' ? (
-              <Orderside
-              orderItems={orderItems}
-              onUpdateQuantity={updateQuantity}
-              onRemove={removeItem}
+
+          {/* Show Orderside only on Menu page */}
+          {path?.includes("/menu") && (
+            <Orderside
             />
-            ): (null)
-          }
+          )}
         </div>
       </SidebarProvider>
-
     </div>
   )
 }

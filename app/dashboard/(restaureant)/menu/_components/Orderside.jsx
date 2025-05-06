@@ -1,108 +1,135 @@
-"use client"
+'use client';
 
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { MoreVertical } from 'lucide-react';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, updateQuantity } from '@/redux/features/order/orderSlice';
+export default function Orderside() {
+  const orders = useSelector((state) => state.order.items);
+  const user = useSelector((state) => state.user.user);
+  const rooms = useSelector((state)=> state.room.room)
+  const tables = useSelector((state)=> state.table.table)
+  const [destination, setDestination] = useState('table');
+  const [destinationNumber, setDestinationNumber] = useState('');
 
-export default function Orderside({orderItems, onUpdateQuantity, onRemove}) {
-    const [destination, setDestination] = useState('table');
-    const [destinationNumber, setDestinationNumber] = useState('');
-    
-    const subtotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = subtotal * 0.05;
-    const total = subtotal + tax;
-
-    const orders = useSelector((state)=> state.order.items);
-    console.log("orders state", orders)
-
-    function addOrder() {
-       // Create order object with all relevant data
-       const orderData = {
-         items: orderItems,
-         subtotal: subtotal.toFixed(2),
-         tax: tax.toFixed(2),
-         total: total.toFixed(2),
-         destinationType: destination,
-         destinationNumber: destinationNumber
-       };
-       
-       console.log("Order placed:", orderData);
-    }
+  const roomNumbers = rooms.map((room) => room.number);
+  const tableNumbers = tables.map((table) => table.number);
   
-    return (
-      <div className="border-l w-80 bg-sidebar flex flex-col h-full">
-        <div className="px-3 py-4">
-          <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
-        </div>
-        
-        <div className="flex-grow overflow-auto px-3">
-          {orderItems.length > 0 ? (
-            orderItems.map((item) => (
-              <div key={item.id} className="flex justify-between items-center py-2 border-b">
-                <div>
-                  <div className="font-medium">{item.name}</div>
-                  <div className="text-sm text-gray-500">
-                    ${item.price} x {item.quantity}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Button variant="outline" size="sm" onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>-</Button>
-                  <span>{item.quantity}</span>
-                  <Button variant="outline" size="sm" onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>+</Button>
-                  <Button variant="ghost" size="sm" onClick={() => onRemove(item.id)}>✕</Button>
+  console.log("rooms and tables",rooms?.number,tables?.number)
+  const subtotal = orders.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
+  const tax = subtotal * 0.05;
+  const total = subtotal + tax;
+
+  const userId = user?.id;
+  const dispatch = useDispatch();
+
+  function addOrder() {
+    const orderData = {
+      userId,
+      tableId: destination === 'table' ? `table_${destinationNumber}` : null,
+      roomId: destination === 'room' ? `room_${destinationNumber}` : null,
+      status: 'PENDING',
+      total: parseFloat(total.toFixed(2)),
+      items: orders.map((item) => ({
+        menuItemId: item.id,
+        quantity: item.quantity,
+        price: parseFloat(item.price)
+      }))
+    };
+
+    console.log('Order placed:', orderData);
+    
+  }
+
+  return (
+    <div className="border-l w-80 bg-sidebar flex flex-col h-full">
+      <div className="px-3 py-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Order Summary</h2>
+
+        {/* 3-dot destination select */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreVertical className="w-5 h-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-32 p-2">
+            <div
+              onClick={() => setDestination('table')}
+              className={`cursor-pointer px-2 py-1 rounded hover:bg-muted ${destination === 'table' ? 'bg-muted font-semibold' : ''}`}
+            >
+              Table
+            </div>
+            <div
+              onClick={() => setDestination('room')}
+              className={`cursor-pointer px-2 py-1 rounded hover:bg-muted ${destination === 'room' ? 'bg-muted font-semibold' : ''}`}
+            >
+              Room
+            </div>
+          </PopoverContent>
+        </Popover>
+
+      </div>
+      <div className='px-2'>
+        <select
+          className="w-full p-2 border rounded"
+          value={destinationNumber}
+          onChange={(e) => setDestinationNumber(e.target.value)}
+        >
+          <option value="">
+            Select {destination === 'table' ? 'Table' : 'Room'} Number
+          </option>
+          {(destination === 'table' ? tableNumbers : roomNumbers).map((num) => (
+            <option key={num} value={num}>
+              {destination === 'table' ? `Table ${num}` : `Room ${num}`}
+            </option>
+          ))}
+        </select>
+      </div>
+
+
+      <div className="flex-grow overflow-auto px-3">
+        {orders.length > 0 ? (
+          orders.map((item) => (
+            <div key={item.id} className="flex justify-between items-center py-2 border-b">
+              <div>
+                <div className="font-medium">{item.name}</div>
+                <div className="text-sm text-gray-500">
+                  ${item.price} x {item.quantity}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="text-center py-8 text-gray-500">No items in order</div>
-          )}
-        </div>
-        
-        <div className="mt-auto border-t p-3">
-          {/* Destination selection */}
-          <div className="mb-4">
-            <div className="flex gap-2 mb-2">
-              <Button 
-                variant={destination === 'table' ? "default" : "outline"} 
-                size="sm" 
-                className="flex-1"
-                onClick={() => setDestination('table')}
-              >
-                Table
-              </Button>
-              <Button 
-                variant={destination === 'room' ? "default" : "outline"} 
-                size="sm"
-                className="flex-1"
-                onClick={() => setDestination('room')}
-              >
-                Room
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="outline" size="sm" onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }))}>-</Button>
+                <span>{item.quantity}</span>
+                <Button variant="outline" size="sm" onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}>+</Button>
+                <Button variant="ghost" size="sm" onClick={() => dispatch(removeItem(item.id))}>✕</Button>
+              </div>
             </div>
-            <input
-              type="number"
-              placeholder={destination === 'table' ? "Table Number" : "Room Number"}
-              className="w-full p-2 border rounded"
-              value={destinationNumber}
-              onChange={(e) => setDestinationNumber(e.target.value)}
-            />
-          </div>
-          
-          {/* Order totals */}
-          <div className="text-right text-sm mb-4">
-            <div>Sub Total: ${subtotal.toFixed(2)}</div>
-            <div>Tax 5%: ${tax.toFixed(2)}</div>
-            <div className="font-bold text-lg">Total: ${total.toFixed(2)}</div>
-          </div>
-          
-          <Button 
-            className="w-full" 
-            onClick={addOrder}
-            disabled={orderItems.length === 0 || !destinationNumber}
-          >
-            Place Order
-          </Button>
-        </div>
+          ))
+        ) : (
+          <div className="text-center py-8 text-gray-500">No items in order</div>
+        )}
       </div>
-    );
+
+      <div className="mt-auto border-t p-3 space-y-4">
+        {/* Totals */}
+        <div className="text-right text-sm">
+          <div>Sub Total: ${subtotal.toFixed(2)}</div>
+          <div>Tax 5%: ${tax.toFixed(2)}</div>
+          <div className="font-bold text-lg">Total: ${total.toFixed(2)}</div>
+        </div>
+
+        {/* Submit */}
+        <Button
+          className="w-full"
+          onClick={addOrder}
+          disabled={orders.length === 0 || !destinationNumber}
+        >
+          Place Order
+        </Button>
+      </div>
+    </div>
+  );
 }
