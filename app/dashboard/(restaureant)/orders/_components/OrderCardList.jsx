@@ -10,13 +10,14 @@ import { OrderDetails } from "./orderdetails";
 import { useSelector } from "react-redux";
 import { Eye, XCircle } from "lucide-react";
 import OrderRecipt from "./orderRecipt";
+import { useFetch } from "@/hooks/useFetch";
 
 export default function OrderCardList({ data = [] }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   // Client-side state for dates to prevent hydration mismatch
   const [isClient, setIsClient] = useState(false);
-  const tables = useSelector((state) => state.table.table);
+   const { data: tables, isLoading, isError } = useFetch('/api/table', ['tables'])
   const rooms = useSelector((state) => state.room.room);
   // Set isClient to true after component mounts on client
   useEffect(() => {
@@ -62,7 +63,7 @@ export default function OrderCardList({ data = [] }) {
     );
   }
 
-
+  console.log("Tables", tables)
 
   console.log("Tables Dta", tables, rooms)
   const getTableNumber = (id) => {

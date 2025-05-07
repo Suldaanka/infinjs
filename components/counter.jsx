@@ -22,13 +22,14 @@ export function Counter() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    // Fix the logical check here - use && instead of comma
     if (user && rooms && tables) {
       dispatch(setUser(user));
       dispatch(setRoom(rooms));
       dispatch(setTable(tables));
     }
   }, [user, rooms,tables, dispatch]);
+
+  console.log("rooms and tables", rooms, tables);
     
   return (
     <></>

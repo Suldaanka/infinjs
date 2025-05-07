@@ -17,6 +17,12 @@ export async function GET(req) {
     _sum: {
       amount: true,
     },
+    orderBy: {
+      _sum: {
+        amount: 'desc', // Order by sum amount in descending order
+      },
+    },
+    take: 3, // Take only the top 3 results
   })
 
   const ExpenseCategory = await prisma.ExpenseCategory.findMany();

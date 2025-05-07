@@ -6,6 +6,8 @@ import { MoreVertical } from 'lucide-react';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateQuantity } from '@/redux/features/order/orderSlice';
+import { useMutate } from '@/hooks/useMutate';
+import { toast } from 'sonner';
 export default function Orderside() {
   const orders = useSelector((state) => state.order.items);
   const user = useSelector((state) => state.user.user);
@@ -14,8 +16,8 @@ export default function Orderside() {
   const [destination, setDestination] = useState('table');
   const [destinationNumber, setDestinationNumber] = useState('');
 
-  const roomNumbers = rooms.map((room) => room.number);
-  const tableNumbers = tables.map((table) => table.number);
+  /* const roomNumbers = rooms?.map((room) => room.number);
+  const tableNumbers = tables?.map((table) => table.number); */
   
   console.log("rooms and tables",rooms?.number,tables?.number)
   const subtotal = orders.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
@@ -24,12 +26,13 @@ export default function Orderside() {
 
   const userId = user?.id;
   const dispatch = useDispatch();
+  const { mutate } = useMutate(`/api/orders/add`,['orders'], { method: 'POST',});
 
   function addOrder() {
     const orderData = {
       userId,
-      tableId: destination === 'table' ? `table_${destinationNumber}` : null,
-      roomId: destination === 'room' ? `room_${destinationNumber}` : null,
+      tableId: destination === 'table' ? destinationNumber : null,
+      roomId: destination === 'room' ? destinationNumber : null,
       status: 'PENDING',
       total: parseFloat(total.toFixed(2)),
       items: orders.map((item) => ({
@@ -40,7 +43,19 @@ export default function Orderside() {
     };
 
     console.log('Order placed:', orderData);
-    
+
+    mutate(orderData, {
+      onSuccess: () => {
+        toast.success('Order placed successfully!');
+        dispatch({ type: 'order/clear' });
+        setDestinationNumber('');
+      },
+      onError: (error) => {
+        console.error('Error placing order:', error);
+        toast.error('Order placed successfully!');
+      }
+    });
+     
   }
 
   return (
@@ -81,9 +96,9 @@ export default function Orderside() {
           <option value="">
             Select {destination === 'table' ? 'Table' : 'Room'} Number
           </option>
-          {(destination === 'table' ? tableNumbers : roomNumbers).map((num) => (
-            <option key={num} value={num}>
-              {destination === 'table' ? `Table ${num}` : `Room ${num}`}
+          {(destination === 'table' ? tables : rooms)?.map((num) => (
+            <option key={num.id} value={num.id}>
+              {destination === 'table' ? `Table ${num.number}` : `Room ${num.number}`}
             </option>
           ))}
         </select>

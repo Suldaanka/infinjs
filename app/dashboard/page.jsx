@@ -1,17 +1,29 @@
+"use client"
 import React, { use } from 'react'
+import { PChart } from './_components/pieChart'
 import { LnChart } from './_components/lineChart'
-import { PiChart } from './_components/pieChart'
+import { useSelector } from 'react-redux'
+import { Import } from 'lucide-react'
+import {router} from 'next/navigation'
+
 
 export default function page() {
-  
+const user = useSelector((state) => state.user.user);
+console.log("user",user)
+
+
   return (
-    <div className='flex flex-row justify-between gap-5'>
-      <div className='h-1/2 w-1/2'>
-      <LnChart/>
+    <>
+      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl bg-muted/50" />
       </div>
-      <div className='h-1/2 w-1/2'>
-      <PiChart/>
+      <div className='flex flex-row justify-between gap-5 mt-2'>
+        <LnChart/>
+        <PChart />
       </div>
-    </div>
+    </>
+
   )
 }

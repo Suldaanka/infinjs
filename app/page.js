@@ -1,5 +1,14 @@
 "use client";
 
+import AboutSection from "@/components/about-section";
+import Amenities from "@/components/Amenities";
+import Contact from "@/components/contact-section";
+import FooterSection from "@/components/footer-section";
+import Gallery from "@/components/Gallery";
+import HeroSection from "@/components/hero-section";
+import Rooms from "@/components/room-section";
+import Testimonial from "@/components/testimonial";
+import landingPageContent from "@/constants/landinpageContent";
 import { useState } from "react";
 
 
@@ -10,15 +19,7 @@ import { useSelector } from "react-redux";
 
 
 
-import landingPageContent from "@/constants/landinpageContent";
-import AboutSection from "@/components/about-section";
-import Amenities from "@/components/Amenities";
-import HeroSection from "@/components/hero-section";
-import Rooms from "@/components/room-section";
-import Gallery from "@/components/Gallery";
-import Testimonial from "@/components/testimonial";
-import Contact from "@/components/contact-section";
-import FooterSection from "@/components/footer-section";
+
 
 
 export default function Home() {

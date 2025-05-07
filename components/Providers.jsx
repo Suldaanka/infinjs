@@ -9,11 +9,12 @@ import { Counter } from '@/components/counter';
 
 export function ClientProviders({ children }) {
   return (
+    
     <ClerkProvider>
       <Provider store={store}>
         <QueryProvider>
           <Counter />
-          {children}
+            {children}
         </QueryProvider>
         <Toaster />
       </Provider>

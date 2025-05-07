@@ -1,8 +1,6 @@
 "use client"
-
-import { TrendingUp } from "lucide-react"
+import { TrendingDown, TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
-
 import {
   Card,
   CardContent,
@@ -17,42 +15,56 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+import { useFetch } from "@/hooks/useFetch"
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  booking: {
+    label: "Booking Revenue",
     color: "var(--color-chart-1)",
   },
-  mobile: {
-    label: "Mobile",
+  order: {
+    label: "Order Revenue",
     color: "hsl(var(--chart-2))",
   },
 }
 
 export function LnChart() {
-  return (
-    <Card>
+  const { data: revenueData, loading, error } = useFetch('/api/revenue/monthly',['revenue'])
+
+  if (loading) return (
+    <Card className="w-[400px]">
       <CardHeader>
-        <CardTitle>Line Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Loading Revenue Data...</CardTitle>
+      </CardHeader>
+    </Card>
+  )
+
+  if (error) return (
+    <Card className="w-[400px]">
+      <CardHeader>
+        <CardTitle>Error</CardTitle>
+        <CardDescription>{error.message}</CardDescription>
+      </CardHeader>
+    </Card>
+  )
+
+  // Calculate total growth percentage
+  const totalGrowth = revenueData && revenueData.length > 1 ? 
+    ((revenueData[revenueData.length-1].booking + revenueData[revenueData.length-1].order) / 
+     (revenueData[revenueData.length-2].booking + revenueData[revenueData.length-2].order) - 1) * 100 : 0
+
+  return (
+    <Card className="w-[400px]">
+      <CardHeader>
+        <CardTitle>Monthly Revenue</CardTitle>
+        <CardDescription>Last 6 months</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+            data={revenueData}
+            margin={{ left: 12, right: 12 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -64,16 +76,16 @@ export function LnChart() {
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Line
-              dataKey="desktop"
+              dataKey="booking"
               type="monotone"
               stroke="var(--color-chart-1)"
               strokeWidth={2}
               dot={false}
             />
             <Line
-              dataKey="mobile"
+              dataKey="order"
               type="monotone"
-              stroke="var(--color-chart-2)"
+              stroke="var(--chart-2)"
               strokeWidth={2}
               dot={false}
             />
@@ -84,10 +96,11 @@ export function LnChart() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              {totalGrowth > 0 ? 'Trending up' : 'Trending down'} by {Math.abs(totalGrowth).toFixed(1)}% this month 
+              {totalGrowth > 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Showing total visitors for the last 6 months
+              Showing total revenue for the last 6 months
             </div>
           </div>
         </div>

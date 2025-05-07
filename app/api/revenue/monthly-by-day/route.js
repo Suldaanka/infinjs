@@ -9,6 +9,7 @@ export async function GET(req) {
   const start = new Date(year, month - 1, 1)
   const end = new Date(year, month, 1)
 
+  // Fetch booking revenue
   const bookings = await prisma.booking.findMany({
     where: {
       createdAt: {
@@ -22,7 +23,7 @@ export async function GET(req) {
     },
   })
 
-  const revenueMap = {}
+  const bookingRevenueMap = {}
 
   for (const booking of bookings) {
     const createdAt = new Date(booking.createdAt)
@@ -32,17 +33,68 @@ export async function GET(req) {
       (new Date(booking.checkOut).getTime() - new Date(booking.checkIn).getTime()) / (1000 * 60 * 60 * 24)
     const revenue = booking.room.price * nights
 
-    if (!revenueMap[dateKey]) {
-      revenueMap[dateKey] = 0
+    if (!bookingRevenueMap[dateKey]) {
+      bookingRevenueMap[dateKey] = 0
     }
-    revenueMap[dateKey] += revenue
+    bookingRevenueMap[dateKey] += revenue
   }
 
-  const dailyRevenue = Object.entries(revenueMap)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, revenue]) => ({ date, revenue }))
+  // Fetch orders revenue
+  const orders = await prisma.order.findMany({
+    where: {
+      createdAt: {
+        gte: start,
+        lt: end,
+      },
+      status: 'SERVED',
+    },
+    include: {
+      items: true,
+    },
+  })
 
-  const totalRevenue = dailyRevenue.reduce((acc, cur) => acc + cur.revenue, 0)
+  const orderRevenueMap = {}
 
-  return NextResponse.json({ month: monthStr, dailyRevenue, totalRevenue })
+  for (const order of orders) {
+    const createdAt = new Date(order.createdAt)
+    const dateKey = createdAt.toISOString().split('T')[0]
+
+    const revenue = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+
+    if (!orderRevenueMap[dateKey]) {
+      orderRevenueMap[dateKey] = 0
+    }
+    orderRevenueMap[dateKey] += revenue
+  }
+
+  // Combine all dates from both revenue streams
+  const allDates = new Set([
+    ...Object.keys(bookingRevenueMap),
+    ...Object.keys(orderRevenueMap)
+  ])
+
+  // Create combined daily revenue data
+  const dailyRevenue = Array.from(allDates)
+    .sort((a, b) => a.localeCompare(b))
+    .map(date => ({
+      date,
+      bookingRevenue: bookingRevenueMap[date] || 0,
+      orderRevenue: orderRevenueMap[date] || 0,
+      totalRevenue: (bookingRevenueMap[date] || 0) + (orderRevenueMap[date] || 0)
+    }))
+
+  // Calculate totals
+  const totalBookingRevenue = dailyRevenue.reduce((acc, cur) => acc + cur.bookingRevenue, 0)
+  const totalOrderRevenue = dailyRevenue.reduce((acc, cur) => acc + cur.orderRevenue, 0)
+  const totalRevenue = totalBookingRevenue + totalOrderRevenue
+
+  return NextResponse.json({
+    month: monthStr,
+    dailyRevenue,
+    totals: {
+      booking: totalBookingRevenue,
+      orders: totalOrderRevenue,
+      combined: totalRevenue
+    }
+  })
 }

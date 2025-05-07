@@ -10,25 +10,52 @@ export async function GET(req) {
   const end = new Date(dateStr)
   end.setDate(end.getDate() + 1)
 
+  // Get booking revenue
   const bookings = await prisma.booking.findMany({
     where: {
       createdAt: {
         gte: start,
         lt: end,
       },
-      status: 'CONFIRMED', // optional: only include paid bookings
+      status: 'CONFIRMED',
     },
     include: {
-      room: true, // get room.price
+      room: true,
     },
   })
 
-  let totalRevenue = 0
+  let bookingRevenue = 0
   for (const booking of bookings) {
     const nights =
       (new Date(booking.checkOut).getTime() - new Date(booking.checkIn).getTime()) / (1000 * 60 * 60 * 24)
-    totalRevenue += booking.room.price * nights
+    bookingRevenue += booking.room.price * nights
   }
 
-  return NextResponse.json({ date: dateStr, totalRevenue })
+  // Get order revenue
+  const orders = await prisma.order.findMany({
+    where: {
+      createdAt: {
+        gte: start,
+        lt: end,
+      },
+      status: 'SERVED', // or whatever your completed status is
+    },
+    include: {
+      items: true,
+    },
+  })
+
+  let orderRevenue = 0
+  for (const order of orders) {
+    orderRevenue += order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  }
+
+  return NextResponse.json({
+    date: dateStr,
+    revenue: {
+      booking: bookingRevenue,
+      order: orderRevenue,
+      total: bookingRevenue + orderRevenue
+    }
+  })
 }

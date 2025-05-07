@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import Image from "next/image";
 
 export default function OrderDetailsPage() {
   const params = useParams();
@@ -129,7 +130,7 @@ export default function OrderDetailsPage() {
           {order.items.map((item) => (
             <Card key={item.id} className="rounded-xl border overflow-hidden">
               {item.menuItem?.image && (
-                <img
+                <Image
                   src={item.menuItem.image}
                   alt={item.menuItem.name}
                   className="w-full h-32 object-cover"
