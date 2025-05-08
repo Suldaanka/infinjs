@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { OrderDetails } from "./orderdetails";
 import { useSelector } from "react-redux";
 import { Eye, XCircle } from "lucide-react";
-import OrderRecipt from "./orderRecipt";
 import { useFetch } from "@/hooks/useFetch";
+import OrderRecipt from "./orderRecipt";
 
 export default function OrderCardList({ data = [] }) {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function OrderCardList({ data = [] }) {
   const [isClient, setIsClient] = useState(false);
    const { data: tables, isLoading, isError } = useFetch('/api/table', ['tables'])
   const rooms = useSelector((state) => state.room.room);
-  // Set isClient to true after component mounts on client
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -66,16 +66,6 @@ export default function OrderCardList({ data = [] }) {
   console.log("Tables", tables)
 
   console.log("Tables Dta", tables, rooms)
-  const getTableNumber = (id) => {
-    const table = tables.find((t) => t.id === id);
-    return table?.number || id;
-  };
-
-  const getRoomNumber = (id) => {
-    const room = rooms.find((r) => r.id === id);
-    return room?.number || id;
-  };
-
 
   return (
     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -115,13 +105,13 @@ export default function OrderCardList({ data = [] }) {
             {order?.roomId && (
               <div className="flex items-center justify-between">
                 <span>Room:</span>
-                <span>0{getRoomNumber(order.roomId)}</span>
+                <span>0{order.room.number}</span>
               </div>
             )}
             {order?.tableId && (
               <div className="flex items-center justify-between">
                 <span>Table:</span>
-                <span>0{getTableNumber(order.tableId)}</span>
+                <span>0{order.table.number}</span>
               </div>
             )}
             <div className="flex flex-col gap-2 mt-4">
@@ -162,7 +152,7 @@ export default function OrderCardList({ data = [] }) {
                     size={22}
                     onClick={() => orderView(order.id)}
                   />
-                  <OrderRecipt/>
+                  <OrderRecipt data={order} />
                 </div>
 
               </div>
