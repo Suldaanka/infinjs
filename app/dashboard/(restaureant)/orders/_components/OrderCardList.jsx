@@ -114,9 +114,9 @@ export default function OrderCardList({ data = [] }) {
                 <span>0{order.table.number}</span>
               </div>
             )}
-            <div className="flex flex-col gap-2 mt-4">
+            <div className="flex flex-col gap-2">
               {/* Status update buttons */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 justify-between">
                 {order?.status === "PENDING" && (
                   <Button
                     variant="secondary"
@@ -133,9 +133,15 @@ export default function OrderCardList({ data = [] }) {
                     Mark Served
                   </Button>
                 )}
-                <div className="flex items-center justify-between mt-4">
-                  {/* Cancel Order Icon */}
-                  {
+                <div className="flex items-center justify-between gap-2">
+                  {/* View Order Icon */}
+                  <Eye
+                    className="text-blue-500 cursor-pointer hover:scale-105 transition"
+                    size={22}
+                    onClick={() => orderView(order.id)}
+                  />
+                   {/* Cancel Order Icon */}
+                   {
                     order?.status === "PENDING" ? (
                       <XCircle
                         className="text-red-500 cursor-pointer hover:scale-105 transition"
@@ -144,14 +150,6 @@ export default function OrderCardList({ data = [] }) {
                       />
                     ) : null
                   }
-
-
-                  {/* View Order Icon */}
-                  <Eye
-                    className="text-blue-500 cursor-pointer hover:scale-105 transition"
-                    size={22}
-                    onClick={() => orderView(order.id)}
-                  />
                   <OrderRecipt data={order} />
                 </div>
 

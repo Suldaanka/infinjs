@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -176,11 +176,11 @@ export function AddMenuItem() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
+    <div className="flex flex-col lg:flex-row gap-4 w-full">
       {/* Form */}
-      <div className="w-full md:w-2/3">
+      <div className="w-full lg:w-2/3">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -190,47 +190,40 @@ export function AddMenuItem() {
                   <FormControl>
                     <Input placeholder="Chicken Burger" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    The name of the menu item.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input placeholder="9.99" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    The price of the menu item.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Main Course" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    The category this item belongs to.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem className="w-full sm:w-1/2">
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input placeholder="9.99" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem className="w-full sm:w-1/2">
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Main Course" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             
             <FormField
               control={form.control}
@@ -241,13 +234,10 @@ export function AddMenuItem() {
                   <FormControl>
                     <Textarea 
                       placeholder="Delicious chicken burger with lettuce, tomato, and special sauce."
-                      className="min-h-24"
+                      className="h-20"
                       {...field} 
                     />
                   </FormControl>
-                  <FormDescription>
-                    Detailed description of the menu item.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -266,23 +256,22 @@ export function AddMenuItem() {
                   />
                   
                   {imagePreviews.length > 0 && (
-                    <div className="mt-4">
-                      <p className="text-sm text-gray-500 mb-2">Image Previews:</p>
-                      <div className="flex flex-wrap gap-4">
+                    <div className="mt-2">
+                      <div className="flex flex-wrap gap-2">
                         {imagePreviews.map((preview, index) => (
                           <div key={index} className="relative">
                             <img 
                               src={preview} 
                               alt={`Preview ${index + 1}`} 
-                              className="w-24 h-24 object-cover rounded-md border" 
+                              className="w-16 h-16 object-cover rounded-md border" 
                             />
                             <button
                               type="button"
                               onClick={() => removeImage(index)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                              className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1"
                               aria-label="Remove image"
                             >
-                              <X size={16} />
+                              <X size={14} />
                             </button>
                           </div>
                         ))}
@@ -291,11 +280,8 @@ export function AddMenuItem() {
                   )}
                 </div>
               </FormControl>
-              <FormDescription>
-                Upload one or more images of the menu item.
-              </FormDescription>
               {imageFiles.length === 0 && (
-                <p className="text-sm text-red-500 mt-1">At least one image is required</p>
+                <p className="text-xs text-red-500">At least one image is required</p>
               )}
             </FormItem>
             
@@ -317,15 +303,12 @@ export function AddMenuItem() {
                       <SelectItem value="HIDDEN">Hidden</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    Current availability status of the item.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             
-            <Button type="submit" disabled={isSubmitting || imageFiles.length === 0}>
+            <Button type="submit" disabled={isSubmitting || imageFiles.length === 0} className="mt-2">
               {isSubmitting ? "Adding..." : "Add Menu Item"}
             </Button>
           </form>
@@ -333,74 +316,76 @@ export function AddMenuItem() {
       </div>
       
       {/* Preview Card */}
-      <div className="w-full md:w-1/3">
-        <div className="sticky top-4">
-          <h2 className="text-lg font-semibold mb-4">Menu Item Preview</h2>
-          <Card className="w-full overflow-hidden">
+      <div className="w-full lg:w-1/3">
+        <div>
+          <h2 className="text-base font-medium mb-2">Preview</h2>
+          <Card className="w-full overflow-hidden py-0">
             {/* Image Preview */}
-            {imagePreviews.length > 0 ? (
-              <div className="relative h-48 w-full">
-                <img 
-                  src={imagePreviews[currentImageIndex]} 
-                  alt="Menu item preview" 
-                  className="h-full w-full object-cover"
-                />
-                {imagePreviews.length > 1 && (
-                  <div className="absolute bottom-2 right-2 flex gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="secondary" 
-                      className="h-8 w-8 p-0 rounded-full bg-white/80"
-                      onClick={prevImage}
+            <div className={`${imagePreviews.length > 0 ? "h-32" : "h-20"} w-full`}>
+              {imagePreviews.length > 0 ? (
+                <div className="relative h-full w-full">
+                  <img 
+                    src={imagePreviews[currentImageIndex]} 
+                    alt="Menu item preview" 
+                    className="h-full w-full object-cover"
+                  />
+                  {imagePreviews.length > 1 && (
+                    <div className="absolute bottom-1 right-1 flex gap-1">
+                      <Button 
+                        size="sm" 
+                        variant="secondary" 
+                        className="h-6 w-6 p-0 rounded-full bg-white/80"
+                        onClick={prevImage}
+                      >
+                        &lt;
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="secondary" 
+                        className="h-6 w-6 p-0 rounded-full bg-white/80"
+                        onClick={nextImage}
+                      >
+                        &gt;
+                      </Button>
+                    </div>
+                  )}
+                  <div className="absolute top-1 right-1">
+                    <Badge 
+                      className={`${getStatusColor(watchedValues.status)} text-xs px-1 py-0`}
                     >
-                      &lt;
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="secondary" 
-                      className="h-8 w-8 p-0 rounded-full bg-white/80"
-                      onClick={nextImage}
-                    >
-                      &gt;
-                    </Button>
+                      {watchedValues.status === "AVAILABLE" ? "Available" : 
+                      watchedValues.status === "OUT_OF_STOCK" ? "Out of Stock" : "Hidden"}
+                    </Badge>
                   </div>
-                )}
-                <div className="absolute top-2 right-2">
-                  <Badge 
-                    className={getStatusColor(watchedValues.status)}
-                  >
-                    {watchedValues.status === "AVAILABLE" ? "Available" : 
-                     watchedValues.status === "OUT_OF_STOCK" ? "Out of Stock" : "Hidden"}
-                  </Badge>
                 </div>
-              </div>
-            ) : (
-              <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
-                <p className="text-gray-500">No image uploaded</p>
-              </div>
-            )}
+              ) : (
+                <div className="h-full w-full bg-gray-100 flex items-center justify-center">
+                  <p className="text-gray-400 text-sm">No image</p>
+                </div>
+              )}
+            </div>
             
-            <CardHeader>
+            <CardHeader className="p-3">
               <div className="flex justify-between items-start">
                 <div>
-                  <CardTitle>{watchedValues.name || "Item Name"}</CardTitle>
-                  <CardDescription>{watchedValues.category || "Category"}</CardDescription>
+                  <CardTitle className="text-base">{watchedValues.name || "Item Name"}</CardTitle>
+                  <CardDescription className="text-xs">{watchedValues.category || "Category"}</CardDescription>
                 </div>
-                <div className="text-lg font-bold">
+                <div className="text-sm font-bold">
                   {watchedValues.price ? `$${parseFloat(watchedValues.price).toFixed(2)}` : "$0.00"}
                 </div>
               </div>
             </CardHeader>
             
-            <CardContent>
-              <p className="text-gray-600">
-                {watchedValues.description || "Item description will appear here..."}
+            <CardContent className="py-0 px-3">
+              <p className="text-xs text-gray-600 line-clamp-2">
+                {watchedValues.description || "Description..."}
               </p>
             </CardContent>
             
-            <CardFooter>
-              <div className="text-sm text-gray-500">
-                {imagePreviews.length} {imagePreviews.length === 1 ? "image" : "images"} uploaded
+            <CardFooter className="p-2">
+              <div className="text-xs text-gray-500">
+                {imagePreviews.length} {imagePreviews.length === 1 ? "image" : "images"}
               </div>
             </CardFooter>
           </Card>

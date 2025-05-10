@@ -31,7 +31,7 @@ export default function MenuCard({ menuItems, onAddToOrder }) {
         return (
           <Card
             key={item.id}
-            className="shadow-lg py-4 hover:shadow-xl transition relative group"
+            className="shadow-lg p-0 hover:shadow-xl transition relative group"
           >
             <CardContent className="flex flex-col px-3">
               {firstImageUrl && (

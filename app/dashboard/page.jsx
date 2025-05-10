@@ -4,12 +4,19 @@ import { PChart } from './_components/pieChart'
 import { LnChart } from './_components/lineChart'
 import { useSelector } from 'react-redux'
 import { Import } from 'lucide-react'
-import { router } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 
 export default function page() {
-  const user = useSelector((state) => state.user.user);
-  console.log("user", user)
+  // Add a null check before trying to access user.role
+const user = useSelector((state) => state.user.user);
+console.log("user", user);
+const router = useRouter();
+
+// Only check the role if user exists
+if (user && user.role !== "ADMIN") {
+  router.push("/")
+}
 
 
   return (

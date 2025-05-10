@@ -84,10 +84,10 @@ export default function OrderDetailsPage() {
                 order.status === "PENDING"
                   ? "default"
                   : order.status === "IN_PROGRESS"
-                  ? "secondary"
-                  : order.status === "SERVED"
-                  ? "success"
-                  : "destructive"
+                    ? "secondary"
+                    : order.status === "SERVED"
+                      ? "success"
+                      : "destructive"
               }
               className="uppercase text-xs px-3 py-1"
             >
@@ -129,13 +129,16 @@ export default function OrderDetailsPage() {
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {order.items.map((item) => (
             <Card key={item.id} className="rounded-xl border overflow-hidden">
-              {item.menuItem?.image && (
+              {item.menuItem?.imageUrl && (
                 <Image
-                  src={item.menuItem.image}
+                  src={JSON.parse(item.menuItem.imageUrl)[0]}
                   alt={item.menuItem.name}
                   className="w-full h-32 object-cover"
+                  width={400}
+                  height={200}
                 />
               )}
+
               <CardContent className="py-4 px-3 space-y-1">
                 <h3 className="text-base font-semibold">
                   {item.menuItem?.name || "Unknown Item"}

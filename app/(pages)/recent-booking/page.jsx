@@ -71,7 +71,7 @@ export default function RecentBooking() {
   // Get room number by room id
 
   
-  const { data: allRooms } = useFetch('/api/rooms/');
+  const { data: allRooms } = useFetch('/api/rooms/', ['rooms']);
 
   // Create a mapping of roomId to roomNumber
   const roomNumberMap = {};

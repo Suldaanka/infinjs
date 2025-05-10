@@ -1,23 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { columns } from "./_components/columns";
-import { useFetch } from "@/hooks/useFetch";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+
+import { useFetch } from "@/hooks/useFetch";
 import Loading from "@/components/Loading";
-import { DataTable } from "../../expenses/data-table";
 import OrderCardList from "./_components/OrderCardList";
 
 const STATUS_OPTIONS = ["PENDING", "IN_PROGRESS", "SERVED", "CANCELLED"];
 
 export default function Page() {
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const tableColumns = columns(queryClient);
 
-  const { data, isLoading, isError } = useFetch("/api/orders", ["orders"]);
+  const user = useSelector((state) => state.user.user);
 
-  const [statusFilter, setStatusFilter] = useState("PENDING"); // Default to PENDING
+  const { data, isLoading, isError } = useFetch("/api/orders", ["orders"]); // always called
+
+  const [statusFilter, setStatusFilter] = useState("PENDING");
   const [searchId, setSearchId] = useState("");
+
+  useEffect(() => {
+    if (user && user.role !== "ADMIN" && user.role !== "WAITER") {
+      router.push("/");
+    }
+  }, [user, router]);
+
+  // If user is still null (loading from Redux), show loading
+  if (!user) return <Loading />;
 
   if (isLoading) return <Loading />;
   if (isError) return <p>Error fetching orders</p>;
@@ -55,7 +67,10 @@ export default function Page() {
                   : "bg-gray-200"
               }`}
             >
-              {status.replace("_", " ").toLowerCase().replace(/^\w/, c => c.toUpperCase())}
+              {status
+                .replace("_", " ")
+                .toLowerCase()
+                .replace(/^\w/, (c) => c.toUpperCase())}
             </button>
           ))}
         </div>
