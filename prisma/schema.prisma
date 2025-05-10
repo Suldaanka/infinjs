@@ -55,6 +55,9 @@ enum RoomStatus {
 model Booking {
   id         String   @id @default(cuid())
   userId     String
+  phoneNumber String?
+  fullName   String
+  guest      String
   user       User     @relation(fields: [userId], references: [id])
   roomId     String
   room       Room     @relation(fields: [roomId], references: [id])
@@ -71,6 +74,7 @@ enum BookingStatus {
   CANCELLED
   COMPLETED
 }
+ 
 
 model MenuItem {
   id        String   @id @default(cuid())
@@ -155,17 +159,25 @@ enum PaymentStatus {
   FAILED
 }
 
-model Expense {
+model ExpenseCategory {
   id          String   @id @default(cuid())
+  name        String   @unique
+  expenses    Expense[]
+}
+
+model Expense {
+  id          String         @id @default(cuid())
   description String
-  category    ExpenseCategory
+  categoryId  String
   amount      Decimal
-  type        ExpenseType // ← new enum
-  paidById    String?
-  paidBy      User?    @relation(fields: [paidById], references: [id])
+  paidBy      User           @relation(fields: [paidById], references: [clerkId])
+  paidById    String
+  type        String
   date        DateTime @default(now())
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  // Relation to the ExpenseCategory model
+  category    ExpenseCategory @relation(fields: [categoryId], references: [id])
 }
 
 enum ExpenseType {
@@ -173,10 +185,3 @@ enum ExpenseType {
   outcome
 }
 
-enum ExpenseCategory {
-  SALARY
-  MAINTENANCE
-  UTILITIES
-  SUPPLIES
-  OTHER
-}

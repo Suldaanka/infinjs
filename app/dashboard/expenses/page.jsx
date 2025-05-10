@@ -1,36 +1,24 @@
 "use client";
-import { columns } from "./columns"
 
-import { useQuery } from "@tanstack/react-query";
-import { DataTable, DataTableDemo } from "./data-table";
-
+import { columns } from "./columns";
+import { DataTable } from "../expenses/data-table";
+import { useFetch } from "@/hooks/useFetch";
+import { useQueryClient } from "@tanstack/react-query";
+import Loading from "@/components/Loading";
+import { useSelector } from "react-redux";
 
 export default function Page() {
-  const fetchExpenses = async () => {
-    const res = await fetch("/api/expense");
-    return res.json();
-  };
+  const queryClient = useQueryClient();
+  const tableColumns = columns(queryClient);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["expenses"],
-    queryFn: fetchExpenses,
-    staleTime: 1000 * 60 * 5,
-  });
+  const { data, isLoading, isError } = useFetch("/api/expense", ["expenses"]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error fetching expenses</p>;
-
-  console.log("Fetched Data:", data); // Debug API response
-
-  // Extract expenses array safely
-  const expenses = data?.expenses || [];
-
-
 
   return (
     <div>
-      <h1>Expenses</h1>
-      <DataTable data={expenses} columns={columns} />
+      <DataTable data={data || []} columns={tableColumns} />
     </div>
   );
 }

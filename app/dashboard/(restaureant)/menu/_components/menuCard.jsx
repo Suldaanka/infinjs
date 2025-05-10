@@ -1,42 +1,72 @@
-"use client"
+"use client";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { addItem } from "@/redux/features/order/orderSlice";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { useDispatch } from "react-redux";
 
+export default function MenuCard({ menuItems, onAddToOrder }) {
 
-export default function MenuCard(menuItems) {
+  const dispatch = useDispatch()
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      {menuItems.items && menuItems.items.map((items) => {
-        // Ensure imageUrl is always an array
-        const imageUrls = Array.isArray(items.imageUrl) ? items.imageUrl : [items.imageUrl];
+      {menuItems && menuItems.map((item) => {
+        let imageUrls = [];
+
+        if (typeof item.imageUrl === "string") {
+          try {
+            imageUrls = JSON.parse(item.imageUrl);
+          } catch (error) {
+            console.error("Failed to parse imageUrl:", error);
+          }
+        } else if (Array.isArray(item.imageUrl)) {
+          imageUrls = item.imageUrl;
+        }
+
+        const firstImageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
 
         return (
-          <Card key={items.id} className="shadow-lg py-4">
+          <Card
+            key={item.id}
+            className="shadow-lg p-0 hover:shadow-xl transition relative group"
+          >
             <CardContent className="flex flex-col px-3">
-              {imageUrls[1] && (
-                <Image
-                  src={imageUrls[1].toString()} // Convert to string
-                  alt={items.name}
-                  width={230}
-                  height={200}
-                  className="rounded-md object-cover"
-                />
+              {firstImageUrl && (
+                <div className="relative w-full h-[160px] rounded overflow-hidden mb-2">
+                  <Image
+                    src={firstImageUrl}
+                    alt={item.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
-              <h2 className="text-lg font-semibold mt-2">{items.name}</h2>
-              <span className="text-sm text-gray-500">{items.category}</span>
-              <span className="text-sm font-bold text-primary">${items.price.toString()}</span>
+
+              <h2 className="text-lg font-semibold">{item.name}</h2>
+              <span className="text-sm text-gray-500">{item.category}</span>
+              <span className="text-sm font-bold text-primary">${item.price.toString()}</span>
+
               <div className="flex flex-row justify-between items-center mt-2">
-                <span className={`text-xs  ${items.status === "AVAILABLE" ? " text-green-600" : " text-red-600"}`}>
-                  {items.status}
+                <span
+                  className={`text-xs ${
+                    item.status === "AVAILABLE" ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {item.status}
                 </span>
-                <span>
-                  <Edit size={18} />
-                </span>
+                <Edit size={18} />
               </div>
 
+              <Button
+                className="mt-4 w-full"
+                onClick={() => dispatch(addItem(item, item.id))}
+                disabled={item.status !== "AVAILABLE"}
+              >
+                Add to Order
+              </Button>
             </CardContent>
           </Card>
         );
