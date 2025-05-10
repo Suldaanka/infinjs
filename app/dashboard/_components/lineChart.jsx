@@ -54,7 +54,7 @@ export function LnChart() {
      (revenueData[revenueData.length-2].booking + revenueData[revenueData.length-2].order) - 1) * 100 : 0
 
   return (
-    <Card className="w-[400px]">
+    <Card className="">
       <CardHeader>
         <CardTitle>Monthly Revenue</CardTitle>
         <CardDescription>Last 6 months</CardDescription>

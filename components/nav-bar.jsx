@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { setLanguage, toggleLanguage } from '@/redux/features/initialLanguage/langSlice';
 import Image from "next/image";
-import soflag from "/public/so.svg";
-import enflag from "/public/en.svg";
+import soflag from "@/public/so.svg";
+import enflag from "@/public/en.svg";
 
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
