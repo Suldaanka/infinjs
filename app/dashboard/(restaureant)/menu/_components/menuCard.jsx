@@ -40,6 +40,7 @@ export default function MenuCard({ menuItems, onAddToOrder }) {
                     src={firstImageUrl}
                     alt={item.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </div>

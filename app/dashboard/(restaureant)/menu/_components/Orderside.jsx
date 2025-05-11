@@ -8,18 +8,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateQuantity } from '@/redux/features/order/orderSlice';
 import { useMutate } from '@/hooks/useMutate';
 import { toast } from 'sonner';
+import { useFetch } from '@/hooks/useFetch';
 export default function Orderside() {
   const orders = useSelector((state) => state.order.items);
   const user = useSelector((state) => state.user.user);
-  const rooms = useSelector((state)=> state.room.room)
-  const tables = useSelector((state)=> state.table.table)
   const [destination, setDestination] = useState('table');
   const [destinationNumber, setDestinationNumber] = useState('');
 
   /* const roomNumbers = rooms?.map((room) => room.number);
   const tableNumbers = tables?.map((table) => table.number); */
   
-  console.log("rooms and tables",rooms?.number,tables?.number)
+
   const subtotal = orders.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
   const tax = subtotal * 0.05;
   const total = subtotal + tax;
@@ -27,7 +26,8 @@ export default function Orderside() {
   const userId = user?.id;
   const dispatch = useDispatch();
   const { mutate } = useMutate(`/api/orders/add`,['orders'], { method: 'POST',});
-
+  const { data: tables } = useFetch('/api/table', ['tables']);
+  const { data: rooms } = useFetch('/api/rooms', ['rooms']);
   function addOrder() {
     const orderData = {
       userId,

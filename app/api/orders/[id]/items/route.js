@@ -14,9 +14,11 @@ export async function GET(request, { params }) {
       include: {
         items: {
           include: {
-            menuItem: true,  // Include menu item details
-          }
-        }
+            menuItem: true,  
+          },
+        },
+        room: true,
+        table: true,
       }
     });
 

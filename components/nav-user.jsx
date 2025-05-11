@@ -9,11 +9,12 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const user = useSelector((state) => state.user.user);
-
+ 
   // --------------- Check if user is not ready ----------------
   if (!user) {
     return (
@@ -33,7 +34,7 @@ export function NavUser() {
     );
   }
   // ------------------------------------------------------------
-
+  const userId = user?.id
   const avatarSrc = user?.imageUrl || "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png";
 
   return (
@@ -75,11 +76,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
+                <Link href={`/dashboard/users/profile/${userId}`} className="w-full h-full flex items-center gap-2">Account</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

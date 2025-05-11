@@ -19,21 +19,19 @@ export default function OrderRecipt({ data }) {
     <div className="border-t border-dashed border-gray-400 my-3 w-full"></div>
   );
   if (!data || !data.id) {
-    return null; // or show fallback UI
+    return null; 
   }
-  console.log(data);
   const contentRef = useRef()
   const reactToPrintFn = useReactToPrint({ contentRef });
 
   const formattedDate = new Date().toLocaleDateString();
   const formattedTime = new Date().toLocaleTimeString();
 
-  // Calculate subtotal from items directly to ensure accuracy
+
   const calculatedSubtotal = data.items.reduce((sum, item) => {
     return sum + (Number(item.price) * item.quantity);
   }, 0);
 
-  // Use the calculated subtotal instead of relying on data.total
   const subtotal = calculatedSubtotal;
   const tax = subtotal * 0.05;
   const grandTotal = subtotal + tax;
@@ -42,7 +40,7 @@ export default function OrderRecipt({ data }) {
       <PrinterIcon onClick={reactToPrintFn} />
 
       <div
-        ref={contentRef}
+        ref={contentRef} 
         className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm w-80 mx-auto font-mono print:block hidden"
         style={{ minHeight: "500px"}}
       >

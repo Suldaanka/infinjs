@@ -17,34 +17,33 @@ import { ArrowLeft } from 'lucide-react'
 
 export default function Layout({ children }) {
   const user = useSelector((state) => state.user.user);
-  const path = usePathname()
-  const router = useRouter()
-  const [pageTitle, setPageTitle] = React.useState('')
+const path = usePathname();
+const router = useRouter();
+const [pageTitle, setPageTitle] = React.useState('');
 
-  React.useEffect(() => {
-    if (path) {
-      const segments = path.split('/').filter(Boolean)
+React.useEffect(() => {
+  if (!path) return;
 
-      // Handle specific dynamic route like order detail
-      if (
-        segments.length >= 2 &&
-        segments[segments.length - 2] === "orders" &&
-        segments[segments.length - 1].length > 10
-      ) {
-        setPageTitle(
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" /> Order Details
-          </button>
-        )
-      } else {
-        const last = segments[segments.length - 1]
-        setPageTitle(last.charAt(0).toUpperCase() + last.slice(1))
-      }
-    }
-  }, [path, router])
+  const segments = path.split('/').filter(Boolean);
+  const last = segments[segments.length - 1];
+  const secondLast = segments[segments.length - 2];
+
+  if (
+    segments.length >= 2 &&
+    secondLast === 'orders' &&
+    last.length > 10
+  ) {
+    setPageTitle('Order Details');
+  } else if (
+    segments.length >= 2 &&
+    secondLast === 'profile'
+  ) {
+    setPageTitle('Profile');
+  } else {
+    // Default case
+    setPageTitle(last.charAt(0).toUpperCase() + last.slice(1));
+  }
+}, [path]);
 
   return (
     <div className='flex flex-col h-screen'>

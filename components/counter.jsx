@@ -1,37 +1,33 @@
-"use client"
+"use client";
 
-import { useFetch } from '@/hooks/useFetch';
-import { setRoom } from '@/redux/features/room/roomSlice';
-import { setTable } from '@/redux/features/tables/tableSlice';
-import { setUser } from '@/redux/features/user/userSlice';
-import { useAuth, useUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useFetch } from '@/hooks/useFetch';
+import { setUser, setUserLoading, setUserError } from '@/redux/features/user/userSlice';
+import { useAuth } from '@clerk/nextjs';
 
-export function Counter() {
+export function UserLoader() {
   const { userId, isLoaded: isAuthLoaded } = useAuth();
-  const id = isAuthLoaded ? userId : null;
-  const tbles = useSelector((state)=> state.table.table);
-  const { data: user } = useFetch(
-    id ? `/api/users/${id}` : null,
-    ["user", id]
-  );
-  
-  const { data: rooms } = useFetch('/api/rooms/', ['rooms']);
-  const { data: tables, isLoading, isError } = useFetch('/api/table', ['tables'])
-
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (user && rooms && tables) {
-      dispatch(setUser(user));
-      dispatch(setRoom(rooms));
-      dispatch(setTable(tables));
-    }
-  }, [user, rooms,tables, dispatch]);
 
-  console.log("rooms and tables", rooms, tables);
-    
-  return (
-    <></>
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useFetch(
+    isAuthLoaded && userId ? `/api/users/${userId}` : null,
+    ['user', userId]
   );
+
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(setUserLoading());
+    } else if (user) {
+      dispatch(setUser(user));
+    } else if (isError) {
+      dispatch(setUserError());
+    }
+  }, [user, isLoading, isError, dispatch]);
+
+  return null;
 }

@@ -18,7 +18,6 @@ export default function OrderCardList({ data = [] }) {
   // Client-side state for dates to prevent hydration mismatch
   const [isClient, setIsClient] = useState(false);
    const { data: tables, isLoading, isError } = useFetch('/api/table', ['tables'])
-  const rooms = useSelector((state) => state.room.room);
 
   useEffect(() => {
     setIsClient(true);
@@ -63,9 +62,6 @@ export default function OrderCardList({ data = [] }) {
     );
   }
 
-  console.log("Tables", tables)
-
-  console.log("Tables Dta", tables, rooms)
 
   return (
     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">

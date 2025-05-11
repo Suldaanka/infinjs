@@ -42,7 +42,7 @@ export default function Testimonial({content}) {
                         <Star key={i} className="h-5 w-5 fill-current" />
                       ))}
                     </div>
-                    <p className="mt-4 text-muted-foreground">"{t.text}"</p>
+                    <p className="mt-4 text-muted-foreground">&ldquo;{t.text}&rdquo;</p>
                     <div className="mt-6 flex items-center">
                       <div className="relative h-10 w-10 overflow-hidden rounded-full">
                         <Image

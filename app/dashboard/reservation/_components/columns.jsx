@@ -22,7 +22,7 @@ import { Update } from "./update";
 export   const columns  = (queryClient) => [
   
   { accessorKey: "fullName", header: "Full Name" },
-  { accessorKey: "roomNumber", header: "Room" },
+  { accessorKey: "room.number", header: "Room" },
   { accessorKey: "checkIn", header: "checkIn" },
   { accessorKey: "checkOut", header: "checkOut" },
   { 

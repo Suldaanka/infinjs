@@ -15,24 +15,24 @@ export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const user = useSelector((state) => state.user.user);
+  
 
   const { data, isLoading, isError } = useFetch("/api/orders", ["orders"]); // always called
 
   const [statusFilter, setStatusFilter] = useState("PENDING");
   const [searchId, setSearchId] = useState("");
 
-  useEffect(() => {
-    if (user && user.role !== "ADMIN" && user.role !== "WAITER") {
-      router.push("/");
+    const { user, status } = useSelector((state) => state.user);
+  
+    // ❌ Show nothing while loading
+    if (status === 'loading' || !user) return null;
+  
+    // ✅ Redirect immediately if user role is not allowed
+    if (user.role !== 'WAITER' && user.role !== 'ADMIN') {
+      router.push('/');
+      return null;
     }
-  }, [user, router]);
-
-  // If user is still null (loading from Redux), show loading
-  if (!user) return <Loading />;
-
-  if (isLoading) return <Loading />;
-  if (isError) return <p>Error fetching orders</p>;
+  
 
   const filteredData = data.filter((order) => {
     const matchStatus =

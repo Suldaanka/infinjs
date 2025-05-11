@@ -104,13 +104,13 @@ export default function OrderDetailsPage() {
             {order.tableId && (
               <div>
                 <p className="text-muted-foreground">Table</p>
-                <p className="font-medium">0{getTableNumber(order.tableId)}</p>
+                <p className="font-medium">0{order.table.number}</p>
               </div>
             )}
             {order.roomId && (
               <div>
                 <p className="text-muted-foreground">Room</p>
-                <p className="font-medium">0{getRoomNumber(order.roomId)}</p>
+                <p className="font-medium">0{order.room.number}</p>
               </div>
             )}
             <div>

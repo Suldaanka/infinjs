@@ -7,6 +7,10 @@ export async function GET() {
             orderBy: {
                 createdAt: "desc",
             },
+            include: {
+                user: true,
+                room: true,
+            },
         });
         return NextResponse.json(bookings, {status: 200});
     } catch (error) {

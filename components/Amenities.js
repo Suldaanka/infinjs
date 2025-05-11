@@ -3,6 +3,7 @@
 import { Wifi } from 'lucide-react'
 import React from 'react'
 import { motion } from "framer-motion"
+import Image from 'next/image'
 
 export default function Amenities({ content }) {
   return (
@@ -37,7 +38,7 @@ export default function Amenities({ content }) {
                 viewport={{ once: true }}
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300">
-                  <img
+                  <Image
                     width={30}
                     height={30}
                     src={item.icon}

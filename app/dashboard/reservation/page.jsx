@@ -13,16 +13,11 @@ export default function Page() {
   const queryClient = useQueryClient();
   const tableColumns = columns(queryClient);
   const { data, isLoading, isError } = useFetch("/api/reservation", ["reservation"]);
-  const rooms = useSelector((state) => state.room.room);
 
-  if (isLoading || !rooms) return <Loading />;
+  if (isLoading) return <Loading />;
   if (isError) return <div>Error loading reservation data</div>;
   if (!data) return <div>No reservation data found</div>;
 
-  const roomNumberMap = {};
-  rooms.forEach((room) => {
-    roomNumberMap[room.id] = room.number;
-  });
 
   const updatedReservations = data.map((reservation) => {
     // Create a safe date formatting function
@@ -39,7 +34,6 @@ export default function Page() {
       ...reservation,
       checkIn: formatDate(reservation.checkIn),
       checkOut: formatDate(reservation.checkOut),
-      roomNumber: roomNumberMap[reservation.roomId] || "Unknown",
     };
   });
 
