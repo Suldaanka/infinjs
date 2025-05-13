@@ -26,6 +26,8 @@ enum Role {
   ADMIN
   STAFF
   USER
+  WAITER
+  KITCHEN
 }
 
 model Room {
@@ -69,6 +71,7 @@ model Booking {
 }
 
 enum BookingStatus {
+
   PENDING
   CONFIRMED
   CANCELLED

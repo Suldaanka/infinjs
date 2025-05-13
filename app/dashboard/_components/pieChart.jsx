@@ -84,7 +84,7 @@ export function PChart() {
   const totalAmount = chartData.reduce((sum, item) => sum + item.amount, 0)
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col ">
       <CardHeader className="items-center pb-0">
         <CardTitle>Expense Categories</CardTitle>
         <CardDescription>Total: ${totalAmount}</CardDescription>

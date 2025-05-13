@@ -17,7 +17,6 @@ export default function OrderCardList({ data = [] }) {
   const queryClient = useQueryClient();
   // Client-side state for dates to prevent hydration mismatch
   const [isClient, setIsClient] = useState(false);
-   const { data: tables, isLoading, isError } = useFetch('/api/table', ['tables'])
 
   useEffect(() => {
     setIsClient(true);

@@ -8,7 +8,9 @@ import {
   Settings2,
   Utensils,
   LayoutDashboard,
-  CircleDollarSign
+  CircleDollarSign,
+  UserCog,
+  User
 } from "lucide-react"
 
 import  {NavMain}  from "@/components/nav-main"
@@ -68,6 +70,12 @@ const data = {
       title: "Expenses",
       url: "/dashboard/expenses",
       icon: CircleDollarSign,
+      hasDropdown: false
+    },
+    {
+      title: "Users",
+      url: "/dashboard/users",
+      icon: User,
       hasDropdown: false
     },
     {

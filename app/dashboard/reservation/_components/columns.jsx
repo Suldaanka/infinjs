@@ -16,7 +16,29 @@ import { Update } from "./update";
 
 
 
+const RoleBadge = ({ status }) => {
+  const getstatusColor = (status) => {
+    switch (status.toUpperCase()) {
+      case "PENDING":
+        return "bg-red-500 hover:bg-red-600";
+      case "CONFIRMED":
+        return "bg-blue-500 hover:bg-blue-600";
+      case "CANCELLED":
+        return "bg-green-500 hover:bg-green-600";
+      case "COMPLETED":
+        return "bg-amber-500 hover:bg-amber-600";
+      default:
+        return "bg-gray-500 hover:bg-gray-600";
+    }
+  };
 
+
+  return (
+    <Badge className={`${getstatusColor(status)} text-white`}>
+      {status}
+    </Badge>
+  );
+};
 
 
 export   const columns  = (queryClient) => [
@@ -27,7 +49,10 @@ export   const columns  = (queryClient) => [
   { accessorKey: "checkOut", header: "checkOut" },
   { 
     accessorKey: "status", 
-    header: "Status"},
+    header: "Status",
+     cell: ({ row }) => <RoleBadge status={row.original.status} />
+  },
+  
   {
     accessorKey: "actions", header: "Actions",
     id: "actions",

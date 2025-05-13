@@ -15,6 +15,7 @@ export default function Page() {
 
   if (isLoading) return <Loading />;
   if (isError) return <p>Error fetching expenses</p>;
+  
 
   return (
     <div>

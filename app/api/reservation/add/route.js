@@ -38,27 +38,33 @@ export async function POST(req) {
     });
 
     if (!availableRoom) {
-      return NextResponse.json({ error: "No available rooms for selected type and dates" }, { status: 404 });
+      return NextResponse.json(
+        { error: "No available rooms for selected type and dates" },
+        { status: 404 }
+      );
     }
 
-    const booking = await prisma.booking.create({
-      data: {
-        userId: user,
-        roomId: availableRoom.id,
-        fullName: fullname,
-        checkIn: checkInDate,
-        checkOut: checkOutDate,
-        guest: guests,
-        status: "PENDING",
-        phoneNumber: phone,
-      },
-    });
-
-  
+    // Use a transaction to ensure booking + room update both succeed
+    const [booking] = await prisma.$transaction([
+      prisma.booking.create({
+        data: {
+          userId: user,
+          roomId: availableRoom.id,
+          fullName: fullname,
+          checkIn: checkInDate,
+          checkOut: checkOutDate,
+          guest: guests,
+          status: "PENDING",
+          phoneNumber: phone,
+        },
+      }),
+      prisma.room.update({
+        where: { id: availableRoom.id },
+        data: { status: "OCCUPIED" },
+      }),
+    ]);
 
     return NextResponse.json(booking, { status: 201 });
-
-   
 
   } catch (error) {
     console.error("Booking error:", error);

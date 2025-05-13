@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import { useMutate } from "@/hooks/useMutate"
 
 const FormSchema = z.object({
-    number: z.coerce.number().min(2, {
+    number: z.coerce.number().min(1, {
         message: "Must be a valid room number",
       }),
       price: z.coerce.number().min(2, {

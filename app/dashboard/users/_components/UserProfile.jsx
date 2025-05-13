@@ -75,7 +75,7 @@ const UserProfile = () => {
               Settings
             </Button>
           </Link>
-          <Link href={`/users/profile/${userData.clerkId}/edit`}>
+          <Link href={`/dashboard/users/profile/${userData.clerkId}/edit`}>
             <Button size="sm" className="flex items-center bg-blue-600 text-white hover:bg-blue-700">
               <Edit2 className="h-4 w-4 mr-1" />
               Edit Profile

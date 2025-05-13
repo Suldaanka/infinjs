@@ -28,16 +28,16 @@ import {
 import { useMutate } from "@/hooks/useMutate"
 import { useSelector } from "react-redux"
 const FormSchema = z.object({
-  fullname: z.string().min(2, { 
+  fullname: z.string().min(2, {
     message: "Must be at least 2 characters long",
   }),
-  phone: z.string().min(2, { 
+  phone: z.string().min(2, {
     message: "Must be at least 2 characters long",
   }),
-  checkIn: z.string().min(2, { 
+  checkIn: z.string().min(2, {
     message: "Must be at least 2 characters long",
   }),
-  checkOut: z.string().min(2, { 
+  checkOut: z.string().min(2, {
     message: "Must be at least 2 characters long",
   }),
   guests: z.string().min(1, {
@@ -60,33 +60,32 @@ export function ReservationForm() {
       roomType: "",
     },
   })
-  
+
   const { mutate } = useMutate('/api/reservation/add', ['reservation']);
-   const user = useSelector((state) => state.user.user);
-    console.log(user);
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   function onSubmit(data) {
     const newData = {
       user: user.id,
       ...data
     }
- 
-    
-   // Log the complete data to console
+
+
+    // Log the complete data to console
     console.log("Form data:", data);
-   mutate(newData, {
+    mutate(newData, {
       onSuccess: () => {
+        form.reset();
         toast.success("Reservation created successfully!")
       },
       onError: (error) => {
         toast.error("Failed to create reservation")
       },
     })
+
+
     
-    // You can add your API call here to save the reservation
-    // For example:
-    // saveReservation(data).then(() => {
-    //   form.reset(); // Reset the form after successful submission
-    // });
+
   }
 
   return (
@@ -123,10 +122,10 @@ export function ReservationForm() {
           name="checkIn"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Check-in Date</FormLabel>
+              <FormLabel>Check-in</FormLabel>
               <FormControl>
                 <Input
-                  type="date"
+                  type="datetime-local"
                   {...field}
                 />
               </FormControl>
@@ -140,10 +139,10 @@ export function ReservationForm() {
           name="checkOut"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Check-out Date</FormLabel>
+              <FormLabel>Check-out</FormLabel>
               <FormControl>
                 <Input
-                  type="date"
+                  type="datetime-local"
                   {...field}
                 />
               </FormControl>
@@ -151,6 +150,7 @@ export function ReservationForm() {
             </FormItem>
           )}
         />
+
 
         <FormField
           control={form.control}

@@ -15,11 +15,11 @@ export default function Page() {
   if (isError) return <div>Error loading users data</div>;
   if (!data) return <div>No users data found</div>;
 
-  console.log("users data", data);
+   const findUsersByUser = data.filter(user => user.role === "USER");
 
   return (
     <div>
-      <DataTable data={data} columns={tableColumns} />
+      <DataTable data={findUsersByUser} columns={tableColumns} />
     </div>
   );
 }

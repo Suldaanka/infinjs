@@ -1,6 +1,7 @@
-
+"use client";
+import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { DotIcon, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { useUser, getC, UserButton } from "@clerk/nextjs";
@@ -14,11 +15,11 @@ import enflag from "@/public/en.svg";
 
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  
+
+
   const dispatch = useDispatch();
   const language = useSelector((state) => state.language.current);
-    
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -63,9 +64,13 @@ export default function NavBar() {
   };
 
 
+    const pathname = usePathname();
+    const isHomepage = pathname === '/';
+
   const navLinks = [
     { href: "#home", label: "Home" },
     { href: "#rooms", label: "Rooms" },
+    { href: "/recent-booking", label: "Booking" },
     { href: "#amenities", label: "Amenities" },
     { href: "#gallery", label: "Gallery" },
     { href: "#testimonials", label: "Testimonials" },
@@ -86,26 +91,47 @@ export default function NavBar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex md:gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={(e) => scrollToSection(e, link.href.substring(1))}
-                className="text-sm font-medium transition-colors hover:text-amber-600"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+      {navLinks.map((link) => {
+        if (link.href.startsWith('/')) {
+          return <Link className="text-sm font-medium transition-colors hover:text-amber-600" href={link.href} key={link.label}>{link.label}</Link>;
+        } else {
+          return (
+            <Link 
+              href={isHomepage ? link.href : `/${link.href}`}
+              onClick={(e) => {
+                if (!isHomepage) {
+                  e.preventDefault();
+                  window.location.href = `/${link.href}`;
+                }
+              }}
+              key={link.label}
+              className="text-sm font-medium transition-colors hover:text-amber-600"
+            >
+              {link.label}
+            </Link>
+          );
+        }
+      })}
+    </nav>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <button 
+            <button
               onClick={() => dispatch(toggleLanguage())}
-            > 
+            >
               <Image alt={language} width={30} height={30} src={language === "en" ? enflag : soflag} />
             </button>
             <ModeToggle />
-            {isSignedIn ? (<UserButton />) : (
+            {isSignedIn ? (
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Link
+                    label="Recent Booking"
+                    labelIcon={<DotIcon />}
+                    href="/recent-booking"
+                  />
+                </UserButton.MenuItems>
+              </UserButton>
+            ) : (
               <button className="hidden md:flex px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">
                 <Link href="/sign-in">Sign In</Link>
               </button>
@@ -128,27 +154,27 @@ export default function NavBar() {
         </div>
 
         {/* Mobile Navigation */}
-         {mobileMenuOpen && (
-                  <div className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-900 md:hidden">
-                    <nav className="flex flex-col p-4 bg-yellow-200 dark:bg-black">
-                      {navLinks.map((link) => (
-                        <a
-                          key={link.href}
-                          href={link.href}
-                          onClick={(e) => scrollToSection(e, link.href.substring(1))}
-                          className="border-b border-gray-200 dark:border-gray-700 py-4 text-base font-medium transition-colors hover:text-amber-600"
-                        >
-                          {link.label}
-                        </a>
-                      ))}
-                      <div className="mt-6 flex flex-col gap-4">
-                        <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm font-medium">
-                          Sign In
-                        </button>
-                      </div>
-                    </nav>
-                  </div>
-                )}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-900 md:hidden">
+            <nav className="flex flex-col p-4 bg-yellow-200 dark:bg-black">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => scrollToSection(e, link.href.substring(1))}
+                  className="border-b border-gray-200 dark:border-gray-700 py-4 text-base font-medium transition-colors hover:text-amber-600"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <div className="mt-6 flex flex-col gap-4">
+                <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm font-medium">
+                  Sign In
+                </button>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
     </div>
   );

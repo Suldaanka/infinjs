@@ -13,18 +13,10 @@ const scrollToSection = (e, id) => {
   }
 };
 
-const containerVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
-};
 
 export default function FooterSection() {
   return (
     <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
       className=''
     >
       <footer className="bg-gray-900 dark:bg-gray-950 py-12 text-gray-300 px-2">

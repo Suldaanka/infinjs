@@ -21,19 +21,29 @@ export default function Page() {
 
   const updatedReservations = data.map((reservation) => {
     // Create a safe date formatting function
-    const formatDate = (dateString) => {
-      try {
-        const date = new Date(dateString);
-        return isNaN(date.getTime()) ? "Invalid Date" : date.toLocaleString();
-      } catch (e) {
-        return "Invalid Date";
-      }
-    };
+    const formatDateTime = (dateString) => {
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid Date";
+
+    return date.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  } catch (e) {
+    return "Invalid Date";
+  }
+};
+
 
     return {
       ...reservation,
-      checkIn: formatDate(reservation.checkIn),
-      checkOut: formatDate(reservation.checkOut),
+      checkIn: formatDateTime(reservation.checkIn),
+      checkOut: formatDateTime(reservation.checkOut),
     };
   });
 

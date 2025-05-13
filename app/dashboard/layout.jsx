@@ -17,33 +17,33 @@ import { ArrowLeft } from 'lucide-react'
 
 export default function Layout({ children }) {
   const user = useSelector((state) => state.user.user);
-const path = usePathname();
-const router = useRouter();
-const [pageTitle, setPageTitle] = React.useState('');
+  const path = usePathname();
+  const router = useRouter();
+  const [pageTitle, setPageTitle] = React.useState('');
 
-React.useEffect(() => {
-  if (!path) return;
+  React.useEffect(() => {
+    if (!path) return;
 
-  const segments = path.split('/').filter(Boolean);
-  const last = segments[segments.length - 1];
-  const secondLast = segments[segments.length - 2];
+    const segments = path.split('/').filter(Boolean);
+    const last = segments[segments.length - 1];
+    const secondLast = segments[segments.length - 2];
 
-  if (
-    segments.length >= 2 &&
-    secondLast === 'orders' &&
-    last.length > 10
-  ) {
-    setPageTitle('Order Details');
-  } else if (
-    segments.length >= 2 &&
-    secondLast === 'profile'
-  ) {
-    setPageTitle('Profile');
-  } else {
-    // Default case
-    setPageTitle(last.charAt(0).toUpperCase() + last.slice(1));
-  }
-}, [path]);
+    if (
+      segments.length >= 2 &&
+      secondLast === 'orders' &&
+      last.length > 10
+    ) {
+      setPageTitle('Order Details');
+    } else if (
+      segments.length >= 2 &&
+      secondLast === 'profile'
+    ) {
+      setPageTitle('Profile');
+    } else {
+      // Default case
+      setPageTitle(last.charAt(0).toUpperCase() + last.slice(1));
+    }
+  }, [path]);
 
   return (
     <div className='flex flex-col h-screen'>

@@ -5,6 +5,7 @@ import { DataTable } from "../expenses/data-table";
 import { useFetch } from "@/hooks/useFetch";
 import { useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
+import { User } from "lucide-react";
 
 export default function Page() {
   const queryClient = useQueryClient();
@@ -15,11 +16,12 @@ export default function Page() {
   if (isError) return <div>Error loading users data</div>;
   if (!data) return <div>No users data found</div>;
 
-  console.log("users data", data);
+  const findUsersByUser = data.filter(user => user.role !== "USER");
+
 
   return (
     <div>
-      <DataTable data={data} columns={tableColumns} />
+      <DataTable data={findUsersByUser} columns={tableColumns} />
     </div>
   );
 }
