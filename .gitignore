@@ -19,6 +19,8 @@
 
 # production
 /build
+/public/uploads
+/prisma/migrations
 
 # misc
 .DS_Store
@@ -42,3 +44,6 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# Sentry Config File
+.env.sentry-build-plugin
