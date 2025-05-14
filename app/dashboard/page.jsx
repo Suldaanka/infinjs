@@ -21,9 +21,11 @@ import { Card } from '@/components/ui/card';
 import { useFetch } from '@/hooks/useFetch';
 import { useSelector } from 'react-redux';
 
+import { useUser } from '@clerk/nextjs';
 export default function Page() {
   const router = useRouter();
   const { user, status } = useSelector((state) => state.user);
+
 
   const {
     data: dashboardData,

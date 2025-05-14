@@ -32,6 +32,12 @@ export default function Page() {
       router.push('/');
       return null;
     }
+
+
+     if (isLoading || !data) return <Loading />;
+      if (isError) return <div>Error loading users data</div>;
+      if (!data) return <div>No users data found</div>;
+    
   
 
   const filteredData = data.filter((order) => {
