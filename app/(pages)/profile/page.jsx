@@ -6,6 +6,7 @@ import Image from 'next/image';
 import NavBar from '@/components/nav-bar';
 import Loading from '@/components/Loading';
 import { EditProfile } from '@/components/editProfile';
+import FooterSection from '@/components/footer-section';
 
 export default function UserProfile() {
   const user = useSelector(state => state.user.user);
@@ -99,6 +100,7 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+      <FooterSection />
     </div>
   );
 }

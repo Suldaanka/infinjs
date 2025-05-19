@@ -1,5 +1,3 @@
-"use client"
-
 import {
     Dialog,
     DialogContent,
@@ -14,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { toast } from "sonner"
+import {toast} from "sonner"
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -27,18 +25,20 @@ import {
 } from "@/components/ui/form"
 import { useSelector } from "react-redux"
 
-// 1. Add phone to schema
+// ✅ Updated Zod schema
 const FormSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
-    phone: z.string().min(9, {
-        message: "Phone number must be at least 9 digits.",
-    }),
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  phone: z.string().min(9, {
+    message: "Phone number must be at least 9 digits.",
+  }),
 })
+
 
 export function EditProfile() {
     const user = useSelector((state) => state.user.user)
+    
     const form = useForm({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -101,7 +101,7 @@ export function EditProfile() {
                             )}
                         />
                         <DialogFooter>
-                            <Button type="submit">Save</Button>
+                            <Button type="submit">Save changes</Button>
                         </DialogFooter>
                     </form>
                 </Form>
