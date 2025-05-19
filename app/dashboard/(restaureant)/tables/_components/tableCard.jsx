@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function TableCard({ data, onStatusChange }) {
+ 
   // Check if data is an array
   if (!Array.isArray(data)) {
     return (
@@ -37,6 +38,7 @@ export default function TableCard({ data, onStatusChange }) {
       if (onStatusChange) {
         onStatusChange(table.id, newStatus);
       }
+
     };
 
     // Table and chair styles based on status
@@ -109,13 +111,13 @@ export default function TableCard({ data, onStatusChange }) {
           {isEditing ? (
             <div className="flex gap-1">
               <button 
-                onClick={() => handleStatusChange("available")}
+                onClick={() => handleStatusChange("AVAILABLE")}
                 className="px-2 py-1 text-xs bg-success text-success-foreground rounded hover:bg-success/80"
               >
                 Available
               </button>
               <button 
-                onClick={() => handleStatusChange("occupied")}
+                onClick={() => handleStatusChange("OCCUPIED")}
                 className="px-2 py-1 text-xs bg-destructive text-destructive-foreground rounded hover:bg-destructive/80"
               >
                 Occupied
@@ -125,9 +127,9 @@ export default function TableCard({ data, onStatusChange }) {
             <button
               onClick={() => setIsEditing(true)}
               className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer ${
-                status === "occupied" 
+                status === "OCCUPIED"
                   ? "bg-destructive/20 hover:bg-destructive/30 text-destructive-foreground" 
-                  : "bg-success/20 hover:bg-success/30 text-success-foreground"
+                  : "bg-green-500 hover:bg-success/30 text-success-foreground"
               }`}
             >
               {status}

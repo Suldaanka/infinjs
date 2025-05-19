@@ -1,3 +1,4 @@
+
 "use client"
 
 import Image from 'next/image'
@@ -53,9 +54,19 @@ export default function HeroSection({ content }) {
             >
               <h2 className="mb-4 text-center text-2xl font-bold">Book Your Stay</h2>
               <Tabs defaultValue="reservation" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="reservation">Reservation</TabsTrigger>
-                  <TabsTrigger value="availability">Check Availability</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
+                  <TabsTrigger
+                    value="reservation"
+                    className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                  >
+                    Reservation
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="availability"
+                    className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                  >
+                    Check Availability
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="reservation" className="mt-4">
@@ -83,7 +94,7 @@ export default function HeroSection({ content }) {
                       </div>
                     </div>
                     <div className="flex items-end pb-2">
-                      <Button className="w-full h-10 bg-amber-600 hover:bg-amber-700 text-white">
+                      <Button className="w-full h-10 bg-blue-500 hover:bg-blue-600 text-white">
                         Check Availability
                       </Button>
                     </div>

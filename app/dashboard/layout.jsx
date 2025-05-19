@@ -13,7 +13,7 @@ import { AppSidebar } from '../../components/app-sidebar'
 import { ModeToggle } from '@/components/ModeToggle'
 import { useSelector } from 'react-redux'
 import Orderside from './(restaureant)/menu/_components/Orderside'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ListOrderedIcon, LogOut, Package2 } from 'lucide-react'
 
 export default function Layout({ children }) {
   const user = useSelector((state) => state.user.user);
@@ -58,8 +58,11 @@ export default function Layout({ children }) {
               </div>
               <div className="flex-1">{pageTitle}</div>
               <div className="flex items-center gap-2 px-4">
-                <SignOutButton />
+                <Package2/>
                 <ModeToggle />
+                <SignOutButton>
+                  <LogOut className="h-4 w-4" />
+                </SignOutButton>
               </div>
             </header>
 

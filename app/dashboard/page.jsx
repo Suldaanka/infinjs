@@ -22,6 +22,7 @@ import { useFetch } from '@/hooks/useFetch';
 import { useSelector } from 'react-redux';
 
 import { useUser } from '@clerk/nextjs';
+import { BarChart, BChart } from './_components/barChart';
 export default function Page() {
   const router = useRouter();
   const { user, status } = useSelector((state) => state.user);
@@ -42,7 +43,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!user) return;
-    if (user.role !== 'WAITER' && user.role !== 'ADMIN') {
+    if (user.role !== 'WAITER  WAITER' || user.role !== 'ADMIN') {
       router.push('/');
     }
   }, [user, router]);
@@ -55,7 +56,7 @@ export default function Page() {
     );
   }
 
-  if (!user || (user.role !== 'WAITER' && user.role !== 'ADMIN')) {
+  if (!user || (user.role !== 'WAITER' || user.role !== 'ADMIN')) {
     return null;
   }
 
@@ -227,7 +228,7 @@ export default function Page() {
               ))}
             </div>
           </Card>
-          <PChart />
+          <BChart/>
         </div>
       </div>
     </div>

@@ -1,16 +1,16 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-const isAdminRoute = createRouteMatcher([
+/* const isAdminRoute = createRouteMatcher([
   '/dashboard(.*)',
   '/api/webhooks/clerk(.*)',
   '/api/(.*)',
-]);
+]); */
 const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
-  
+  '/api/(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
@@ -18,15 +18,14 @@ export default clerkMiddleware(async (auth, request) => {
     await auth.protect(); // Protect private routes
   }
 
-  const { sessionClaims } = await auth(); // Use this safely
-  const role = sessionClaims?.metadata?.role;
+  //const { sessionClaims } = await auth(); // Use this safely
+  //const role = sessionClaims?.metadata?.role;
 
-  console.log('User role:', role); // Log the role
 
   // Check if user is trying to access admin route
-  if (isAdminRoute(request) && role !== 'Admin') {
+ /*  if (isAdminRoute(request) && role !== 'Admin') {
     return NextResponse.redirect(new URL('/', request.url));
-  }
+  } */
 
 }, {
   signInUrl: '/sign-in',

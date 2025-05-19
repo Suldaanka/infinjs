@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { DotIcon, Menu, X } from "lucide-react";
+import { DotIcon, Menu, User, X } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { useUser, getC, UserButton } from "@clerk/nextjs";
@@ -85,7 +85,13 @@ export default function NavBar() {
         <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 md:px-5">
           <div className="flex items-center gap-2">
             <span className="font-serif text-xl sm:text-2xl font-bold">
-              Iftin Hotel
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={40}
+                height={40}
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
+              />
             </span>
           </div>
 
@@ -93,7 +99,7 @@ export default function NavBar() {
           <nav className="hidden md:flex md:gap-6">
       {navLinks.map((link) => {
         if (link.href.startsWith('/')) {
-          return <Link className="text-sm font-medium transition-colors hover:text-amber-600" href={link.href} key={link.label}>{link.label}</Link>;
+          return <Link className="text-sm font-medium transition-colors hover:text-blue-600" href={link.href} key={link.label}>{link.label}</Link>;
         } else {
           return (
             <Link 
@@ -105,7 +111,7 @@ export default function NavBar() {
                 }
               }}
               key={link.label}
-              className="text-sm font-medium transition-colors hover:text-amber-600"
+              className="text-sm font-medium transition-colors hover:text-blue-600"
             >
               {link.label}
             </Link>
@@ -125,9 +131,9 @@ export default function NavBar() {
               <UserButton>
                 <UserButton.MenuItems>
                   <UserButton.Link
-                    label="Recent Booking"
-                    labelIcon={<DotIcon />}
-                    href="/recent-booking"
+                    label="Profile"
+                    labelIcon={<User/>}
+                    href="/profile"
                   />
                 </UserButton.MenuItems>
               </UserButton>
@@ -136,11 +142,6 @@ export default function NavBar() {
                 <Link href="/sign-in">Sign In</Link>
               </button>
             )}
-
-            {/* Book Now Button */}
-            <button className="bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm px-3 py-2 font-medium">
-              Book Now
-            </button>
 
             {/* Mobile menu button */}
             <button
@@ -162,7 +163,7 @@ export default function NavBar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href.substring(1))}
-                  className="border-b border-gray-200 dark:border-gray-700 py-4 text-base font-medium transition-colors hover:text-amber-600"
+                  className="border-b border-gray-200 dark:border-gray-700 py-4 text-base font-medium transition-colors hover:text-blue-600"
                 >
                   {link.label}
                 </a>

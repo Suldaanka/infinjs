@@ -5,7 +5,7 @@ import React from 'react'
 import { motion } from "framer-motion"
 import Image from 'next/image'
 
-export default function Amenities({ content }) {
+export function Amenities({ content }) {
   return (
     <div className='container mx-auto'>
       <section id="amenities" className="bg-background py-16">
@@ -20,7 +20,7 @@ export default function Amenities({ content }) {
             viewport={{ once: true }}
           >
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">{content.title}</h2>
-            <div className="mt-2 h-1 w-24 bg-amber-600 mx-auto"></div>
+            <div className="mt-2 h-1 w-24 bg-blue-500 mx-auto"></div>
             <p className="mt-6 text-lg text-muted-foreground">
               {content.description}
             </p>
@@ -37,7 +37,7 @@ export default function Amenities({ content }) {
                 transition={{ duration: 0.5, delay: index * 0.15 }}
                 viewport={{ once: true }}
               >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
                   <Image
                     width={30}
                     height={30}
@@ -45,7 +45,7 @@ export default function Amenities({ content }) {
                     alt={item.title}
                     style={{
                       filter:
-                        'invert(65%) sepia(72%) saturate(1549%) hue-rotate(346deg) brightness(98%) contrast(92%)',
+                        'invert(40%) sepia(86%) saturate(1500%) hue-rotate(200deg) brightness(95%) contrast(95%)',
                     }}
                   />
                 </div>

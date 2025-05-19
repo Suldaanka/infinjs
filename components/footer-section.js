@@ -36,22 +36,22 @@ export default function FooterSection() {
             <div>
               <h3 className="text-lg font-bold text-white">Quick Links</h3>
               <ul className="mt-4 space-y-2">
-                <li><a href="#home" onClick={(e) => scrollToSection(e, "home")} className="hover:text-amber-400">Home</a></li>
-                <li><a href="#rooms" onClick={(e) => scrollToSection(e, "rooms")} className="hover:text-amber-400">Rooms & Suites</a></li>
-                <li><a href="#amenities" onClick={(e) => scrollToSection(e, "amenities")} className="hover:text-amber-400">Amenities</a></li>
-                <li><a href="#gallery" onClick={(e) => scrollToSection(e, "gallery")} className="hover:text-amber-400">Gallery</a></li>
-                <li><a href="#contact" onClick={(e) => scrollToSection(e, "contact")} className="hover:text-amber-400">Contact</a></li>
+                <li><a href="#home" onClick={(e) => scrollToSection(e, "home")} className="hover:text-blue-400">Home</a></li>
+                <li><a href="#rooms" onClick={(e) => scrollToSection(e, "rooms")} className="hover:text-blue-400">Rooms & Suites</a></li>
+                <li><a href="#amenities" onClick={(e) => scrollToSection(e, "amenities")} className="hover:text-blue-400">Amenities</a></li>
+                <li><a href="#gallery" onClick={(e) => scrollToSection(e, "gallery")} className="hover:text-blue-400">Gallery</a></li>
+                <li><a href="#contact" onClick={(e) => scrollToSection(e, "contact")} className="hover:text-blue-400">Contact</a></li>
               </ul>
             </div>
 
             <div>
               <h3 className="text-lg font-bold text-white">Services</h3>
               <ul className="mt-4 space-y-2">
-                <li><a href="#" className="hover:text-amber-400">Restaurant & Dining</a></li>
-                <li><a href="#" className="hover:text-amber-400">Spa & Wellness</a></li>
-                <li><a href="#" className="hover:text-amber-400">Conference Rooms</a></li>
-                <li><a href="#" className="hover:text-amber-400">Airport Shuttle</a></li>
-                <li><a href="#" className="hover:text-amber-400">Concierge Services</a></li>
+                <li><a href="#" className="hover:text-blue-400">Restaurant & Dining</a></li>
+                <li><a href="#" className="hover:text-blue-400">Spa & Wellness</a></li>
+                <li><a href="#" className="hover:text-blue-400">Conference Rooms</a></li>
+                <li><a href="#" className="hover:text-blue-400">Airport Shuttle</a></li>
+                <li><a href="#" className="hover:text-blue-400">Concierge Services</a></li>
               </ul>
             </div>
 
@@ -64,7 +64,7 @@ export default function FooterSection() {
                   placeholder="Your email"
                   className="rounded-r-none bg-gray-800 dark:bg-gray-900 text-white"
                 />
-                <Button className="rounded-l-none bg-amber-600 hover:bg-amber-700 text-white">Subscribe</Button>
+                <Button className="rounded-l-none bg-blue-600 hover:bg-blue-700 text-white">Subscribe</Button>
               </form>
             </div>
           </div>

@@ -16,6 +16,7 @@ const UserLoader = dynamic(
 export function ClientProviders({ children }) {
   return (
     <ClerkProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Provider store={store}>
         <QueryProvider>
           <UserLoader />
@@ -23,6 +24,7 @@ export function ClientProviders({ children }) {
         </QueryProvider>
         <Toaster />
       </Provider>
+      </ThemeProvider>
     </ClerkProvider>
   );
 }

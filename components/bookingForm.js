@@ -141,7 +141,7 @@ export function BookingForm() {
                 <FormLabel>Guests</FormLabel>
                 <FormControl>
                   <Select onValueChange={field.onChange} defaultValue={field.value} className="w-full">
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select guests" />
                     </SelectTrigger>
                     <SelectContent>
@@ -169,7 +169,7 @@ export function BookingForm() {
               <FormItem>
                 <FormLabel>Room Type</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select  onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select room type" />
                     </SelectTrigger>
@@ -191,7 +191,7 @@ export function BookingForm() {
           <Button 
             type="submit" 
             disabled={isSubmitting} 
-            className=""
+            className="bg-blue-500 hover:bg-blue-600 text-white w-full h-10"
           >
             {isSubmitting ? "Processing..." : "Book Now"}
           </Button>

@@ -1,8 +1,14 @@
-import Image from 'next/image'
-import React from 'react'
-import { motion } from 'framer-motion'
 
-const galleryImages = [
+"use client"
+
+import Image from 'next/image' 
+import React, { useState } from 'react' 
+import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
+export default function Gallery({content}) {
+ 
+  const galleryImages = [
   {
     src: '/imgs/park.jpg',
     alt: 'Hotel lobby',
@@ -45,19 +51,17 @@ const galleryImages = [
     label: 'Family Room',
   },
 ]
-
-export default function Gallery({content}) {
   return (
     <section id="gallery" className="bg-muted py-16">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">{content.title}</h2>
-          <div className="mt-2 h-1 w-24 bg-amber-600 mx-auto"></div>
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">{content?.title || "Our Gallery"}</h2>
+          <div className="mt-2 h-1 w-24 bg-blue-500 mx-auto"></div>
           <p className="mt-6 text-lg text-muted-foreground">
-            {content.description}
+            {content?.description || "Experience the luxury and comfort of our hotel through these stunning images."}
           </p>
         </div>
-
+        
         <div className="mt-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {galleryImages.map((img, index) => (
             <motion.div
@@ -78,7 +82,7 @@ export default function Gallery({content}) {
                 />
               </div>
               <div className="absolute bottom-0 left-0 w-full py-6 px-4 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                <span className="bg-black/60 text-white px-3 py- rounded-full text-sm backdrop-blur-md">
+                <span className="bg-blue-600/80 text-white px-4 py-2 rounded-full text-sm backdrop-blur-md">
                   {img.label}
                 </span>
               </div>

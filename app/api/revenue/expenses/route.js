@@ -22,7 +22,7 @@ export async function GET(req) {
         amount: 'desc', // Order by sum amount in descending order
       },
     },
-    take: 3, // Take only the top 3 results
+    take: 5, // Take only the top 3 results
   })
 
   const ExpenseCategory = await prisma.ExpenseCategory.findMany();
@@ -34,9 +34,6 @@ export async function GET(req) {
       amount: expense._sum.amount || 0,  
     };
   });
-
-  console.log("this is mix data",mixedData)
-
 
 
   return NextResponse.json(mixedData)

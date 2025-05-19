@@ -4,7 +4,7 @@ import React from 'react'
 import { MapPin, Star, Utensils } from "lucide-react"
 import { motion } from "framer-motion"
 
-export default function AboutSection({ content }) {
+export function AboutSection({ content }) {
   return (
     <div className='container mx-auto'>
       <section className="bg-background py-16">
@@ -21,7 +21,7 @@ export default function AboutSection({ content }) {
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
               {content.title}
             </h2>
-            <div className="mt-2 h-1 w-24 bg-amber-600 mx-auto"></div>
+            <div className="mt-2 h-1 w-24 bg-blue-500 mx-auto"></div>
             <p className="mt-6 text-lg text-muted-foreground">
               {content.description}
             </p>
@@ -40,7 +40,7 @@ export default function AboutSection({ content }) {
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   viewport={{ once: true }}
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
                     <Icon className="h-8 w-8" />
                   </div>
                   <h3 className="mt-4 text-xl font-bold">{item.title}</h3>

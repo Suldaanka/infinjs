@@ -47,3 +47,10 @@ next-env.d.ts
 
 # Sentry Config File
 .env.sentry-build-plugin
+/app/api/sentry-example-api/route.js
+/app/sentry-example-page/page.jsx
+.instrumentation.js
+.sentry.edge.config.js
+.sentry.client.config.js
+.sentry.server.config.js
+.instrumentation-client.js

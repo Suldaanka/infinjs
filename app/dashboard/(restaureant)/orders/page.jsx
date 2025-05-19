@@ -28,7 +28,7 @@ export default function Page() {
     if (status === 'loading' || !user) return null;
   
     // ✅ Redirect immediately if user role is not allowed
-    if (user.role !== 'CITCHEN' && user.role !== 'ADMIN') {
+    if (user.role !== 'WAITER' && user.role !== 'ADMIN') {
       router.push('/');
       return null;
     }

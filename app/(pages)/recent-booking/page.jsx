@@ -15,6 +15,8 @@ import {
   CreditCard,
   Moon,
 } from "lucide-react";
+import Loading from "@/components/Loading";
+import Link from "next/link";
 
 export default function RecentBooking() {
   const { data, isLoading, isError } = useFetch(
@@ -95,11 +97,9 @@ export default function RecentBooking() {
       <NavBar />
       <main className="flex-grow w-full md:w-3/4 lg:w-2/3 mx-auto mt-20 px-4">
         <h1 className="text-2xl font-bold mb-6">Recent Booking</h1>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+        <div className="">
           {isLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-700 dark:border-amber-400"></div>
-            </div>
+            <Loading/>
           ) : isError ? (
             <div className="text-center py-12">
               <XCircle size={40} className="text-red-500 mx-auto mb-4" />
@@ -113,12 +113,12 @@ export default function RecentBooking() {
               <p className="text-gray-500 text-lg mb-6 dark:text-gray-400">
                 You don't have any bookings yet.
               </p>
-              <button className="px-6 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors">
-                Explore Available Rooms
+              <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+               <Link href="/#home"> Start Booking Now</Link>
               </button>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-8 pb-5">
               {userBookings.map((booking) => {
                 const badge = getStatusBadge(booking.status);
                 const nights = calculateNights(booking.checkIn, booking.checkOut);
@@ -131,16 +131,16 @@ export default function RecentBooking() {
                     className={`border rounded-lg overflow-hidden transition-shadow ${
                       past
                         ? "border-gray-200 dark:border-gray-700 opacity-70"
-                        : "border-amber-200 dark:border-amber-600"
+                        : "border-blue-200 dark:border-blue-600"
                     } hover:shadow-md bg-white dark:bg-gray-800`}
                   >
                     <div className="md:flex">
-                      <div className="md:w-1/3 h-40 relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-amber-600 to-amber-800 opacity-80 flex flex-col items-center justify-center text-white">
+                      <div className="md:w-1/3 relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800 opacity-80 flex flex-col items-center justify-center text-white">
                           <h3 className="text-xl font-bold mb-2">
                             Room #{roomNum}
                           </h3>
-                          <div className="flex items-center bg-amber-500 bg-opacity-20 px-4 py-2 rounded-full">
+                          <div className="flex items-center bg-blue-500 bg-opacity-20 px-4 py-2 rounded-full">
                             <Moon size={18} className="mr-2" />
                             <span className="font-semibold">
                               {nights} {nights === 1 ? "Night" : "Nights"}
@@ -165,25 +165,25 @@ export default function RecentBooking() {
                         </div>
                         <div className="grid md:grid-cols-2 gap-4 text-gray-700 dark:text-gray-300">
                           <div className="flex items-center">
-                            <Calendar size={16} className="mr-2 text-amber-600" />
+                            <Calendar size={16} className="mr-2 text-blue-600" />
                             <span className="font-medium">Check-In:</span>
                             <span className="ml-1">{formatDate(booking.checkIn)}</span>
                           </div>
                           <div className="flex items-center">
-                            <Calendar size={16} className="mr-2 text-amber-600" />
+                            <Calendar size={16} className="mr-2 text-blue-600" />
                             <span className="font-medium">Check-Out:</span>
                             <span className="ml-1">{formatDate(booking.checkOut)}</span>
                           </div>
                           {booking.guest && (
                             <div className="flex items-center">
-                              <Users size={16} className="mr-2 text-amber-600" />
+                              <Users size={16} className="mr-2 text-blue-600" />
                               <span className="font-medium">Guests:</span>
                               <span className="ml-1">{booking.guest}</span>
                             </div>
                           )}
                           {booking.totalAmount && (
                             <div className="flex items-center">
-                              <CreditCard size={16} className="mr-2 text-amber-600" />
+                              <CreditCard size={16} className="mr-2 text-blue-600" />
                               <span className="font-medium">Total:</span>
                               <span className="ml-1 font-semibold">
                                 {booking.totalAmount}
