@@ -174,14 +174,18 @@ export function Add() {
                                             <SelectContent>
 
                                                 {
-                                                   
-                                                        categories.map((category) => (
-                                                            <SelectItem key={category.id} value={category.id}>
-                                                                {category.name}
-                                                            </SelectItem>
-                                                        ))
-                                                    
-                                                }
+  categories && categories.length > 0 ? (
+    categories.map((category) => (
+      <SelectItem key={category.id} value={category.id}>
+        {category.name}
+      </SelectItem>
+    ))
+  ) : (
+    <SelectItem key={"no-category"} value="no-category">
+      No categories found
+    </SelectItem>
+  )
+}
 
                                                 <div>
                                                     <form onSubmit={(e) => e.preventDefault()}>

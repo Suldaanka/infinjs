@@ -37,13 +37,17 @@ export default function Page() {
     refetchInterval: 1000 * 60 * 5,
   });
 
-  setInterval(() => {
-    refetch();
-  }, 1000 * 60);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 1000 * 60);
+    
+    return () => clearInterval(interval);
+  }, [refetch]);
 
   useEffect(() => {
     if (!user) return;
-    if (user.role !== 'WAITER  WAITER' || user.role !== 'ADMIN') {
+    if (user.role !== 'WAITER' && user.role !== 'ADMIN') {
       router.push('/');
     }
   }, [user, router]);

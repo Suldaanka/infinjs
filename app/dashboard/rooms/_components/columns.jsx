@@ -35,7 +35,7 @@ export   const columns  = (queryClient) => [
       const id = row.original.id;
 
       const handleDelete = async () => {
-        const res = await fetch(`/api/expense/delete/${id}`, {
+        const res = await fetch(`/api/rooms/delete/${id}`, {
           method: "DELETE",
         });
 
