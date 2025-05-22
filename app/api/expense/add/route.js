@@ -5,30 +5,30 @@ export async function POST(req) {
     try {
         const body = await req.json();
         console.log("Received body:", body);
-
-        // Extract fields from body
-        const { description, category, amount, paidById } = body;
-
+        
+        const { description, category, amount, paidById, type } = body;
+        
         // Validate required fields
-        if (!description || !category || !amount) {
+        if (!description || !category || !amount || !paidById || !type) {
             return NextResponse.json(
-                { error: "Missing required fields: description, category, and amount are required" },
+                { error: "Missing required fields: description, category, amount, paidById, and type are required" },
                 { status: 400 }
             );
         }
-
-        // Create expense with the correct fields according to your Prisma model
-        const expense = await prisma.expense.create({
+        
+        const expenses = await prisma.expense.create({
             data: {
                 description,
-                category,
-                amount: parseFloat(amount),
-                paidById: paidById || null,
-                // date, createdAt, and updatedAt will be set automatically by Prisma
-            }
+                categoryId: category, // ✅ Match the schema field name
+                amount,
+                paidById, // ✅ Direct assignment since it matches the schema field
+                type,
+                date: new Date(), // optional if you want to override default
+                createdAt: new Date(), // optional if you want to override default
+            },
         });
-
-        return NextResponse.json({ expense }, { status: 201 });
+                
+        return NextResponse.json(expenses, { status: 201 });
     } catch (error) {
         console.error("Error creating expense:", error);
         return NextResponse.json(
@@ -37,3 +37,7 @@ export async function POST(req) {
         );
     }
 }
+
+
+ 
+
