@@ -33,9 +33,7 @@ export default function Page() {
     refetch,
     isLoading,
     isFetching,
-  } = useFetch('/api/dashboard', ['dashboard'], null, {
-    refetchInterval: 1000 * 60 * 5,
-  });
+  } = useFetch('/api/dashboard', ['dashboard'], null,);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,7 +44,9 @@ export default function Page() {
   }, [refetch]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) return(
+      console.log('No user found')
+    );
     if (user.role !== 'WAITER' && user.role !== 'ADMIN') {
       router.push('/');
     }
@@ -60,9 +60,10 @@ export default function Page() {
     );
   }
 
-  if (!user || (user.role !== 'WAITER' || user.role !== 'ADMIN')) {
+  /* if (!user || (user.role !== 'WAITER' || user.role !== 'ADMIN')) {
+    console.log('No user found');
     return null;
-  }
+  } */
 
   if (!dashboardData) {
     return <div className="p-6">Failed to load dashboard data. Please try again later.</div>;
