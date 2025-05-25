@@ -16,7 +16,7 @@ import Orderside from './(restaureant)/menu/_components/Orderside'
 import { ArrowLeft, ListOrderedIcon, LogOut, Package2 } from 'lucide-react'
 
 export default function Layout({ children }) {
-  const user = useSelector((state) => state.user.user);
+  const { user, status: userStatus } = useSelector((state) => state.user); // Added userStatus
   const path = usePathname();
   const router = useRouter();
   const [pageTitle, setPageTitle] = React.useState('');

@@ -29,15 +29,21 @@ export default function Home() {
   const content = landingPageContent[language][0];
  
   const user = useSelector(state => state.user.user);
+  const userStatus = useSelector(state => state.user.status); // Added userStatus
   const router = useRouter();
-  console.log("user Data",user);
+  console.log("user Data", user, "status", userStatus); // Updated console log
 
   useEffect(() => {
-    if (!user) return;
-    if (user.role !== 'WAITER' || user.role !== 'ADMIN') {
-      router.push('/');
+    // Only redirect if user data loading is complete and successful
+    if (userStatus === 'succeeded') {
+      if (user && (user.role === 'WAITER' || user.role === 'ADMIN')) {
+        // Redirect WAITER or ADMIN to their dashboard or a relevant page
+        router.push('/dashboard'); // Assuming '/dashboard' is the target for these roles
+      }
+      // No explicit redirection for other roles or if user is null after success; they stay on home.
     }
-  }, [user, router]);
+    // Do nothing if status is 'loading', 'idle', or 'failed' to allow default page content to render.
+  }, [user, userStatus, router]);
 
   
   return (

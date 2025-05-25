@@ -19,6 +19,7 @@ export default function NavBar() {
 
   const dispatch = useDispatch();
   const language = useSelector((state) => state.language.current);
+  const [isLanguageInitialized, setIsLanguageInitialized] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -52,7 +53,8 @@ export default function NavBar() {
       // If no language is saved yet, save the default
       localStorage.setItem('language', language);
     }
-  }, []);
+    setIsLanguageInitialized(true);
+  }, [dispatch, language]); // Added dependencies: dispatch, language
 
   const scrollToSection = (e, id) => {
     e.preventDefault();
@@ -121,11 +123,13 @@ export default function NavBar() {
     </nav>
 
           <div className="flex items-center gap-2 sm:gap-4">
+            {isLanguageInitialized && (
             <button
               onClick={() => dispatch(toggleLanguage())}
             >
               <Image alt={language} width={30} height={30} src={language === "en" ? enflag : soflag} />
             </button>
+            )}
             <ModeToggle />
             {isSignedIn ? (
               <UserButton>

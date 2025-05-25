@@ -10,12 +10,9 @@ const isPublicRoute = createRouteMatcher([
 
 // 🔐 Admin-only routes
 const isAdminOnlyRoute = createRouteMatcher([
-  '/api/revenue(.*)',
   '/api/users/create',
   '/api/users/update(.*)',
-  '/api/users/(.*)',
-  '/api/users/delete(.*)',
-  '/api/admin(.*)',         
+  '/api/users/delete(.*)',       
   '/api/webhooks/clerk(.*)',
 ]);
 
@@ -34,6 +31,8 @@ const isGeneralApiRoute = createRouteMatcher([
   '/api/dashboard(.*)',
   '/api/reservation(.*)',
   '/api/reservation/add(.*)',
+  '/api/revenue/expenses(.*)',
+  '/api/revenue/monthly(.*)',
 ]);
 
 // 🛠 Get role of user from your API
@@ -46,7 +45,9 @@ async function getUserRole(userId) {
 
     if (response.ok) {
       const data = await response.json();
-      return data.role?.toUpperCase(); // e.g., 'ADMIN'
+      return data.role?.toUpperCase(); 
+
+      console.log('User role:', data.role);
     }
 
     return 'WAITER'; // Default fallback

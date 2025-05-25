@@ -44,13 +44,17 @@ export default function Page() {
   }, [refetch]);
 
   useEffect(() => {
-    if (!user) return(
-      console.log('No user found')
-    );
-    if (user.role !== 'WAITER' && user.role !== 'ADMIN') {
-      router.push('/');
+    // Only attempt to redirect if user data loading is complete and successful
+    if (status === 'succeeded') {
+      if (!user || (user.role !== 'WAITER' && user.role !== 'ADMIN')) {
+        // If user data is successfully loaded, but user is null or role is not authorized
+        console.log('Redirecting: User not authorized or not found after successful load.');
+        router.push('/');
+      }
     }
-  }, [user, router]);
+    // If status is 'loading', 'idle', or 'failed', do nothing here.
+    // The main component return will handle showing Loading component or error messages.
+  }, [user, status, router]);
 
   if (status === 'loading' || isLoading) {
     return (
