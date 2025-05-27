@@ -45,7 +45,7 @@ export default function Contact({ content }) {
                   <div>
                     <h3 className="font-medium">Address</h3>
                     <p className="mt-1 text-gray-300">
-                      {content?.address || "123 Hotel Street, City Center, Country"}
+                      {content?.address || "Iftin Hotel Hobyo, Galmudug somalia"}
                     </p>
                   </div>
                 </div>
@@ -54,7 +54,7 @@ export default function Contact({ content }) {
                   <div>
                     <h3 className="font-medium">Phone</h3>
                     <p className="mt-1 text-gray-300">
-                      {content?.phone || "+1 (555) 123-4567"}
+                      {content?.phone || "+252xxxxxxx"}
                     </p>
                   </div>
                 </div>
@@ -63,7 +63,7 @@ export default function Contact({ content }) {
                   <div>
                     <h3 className="font-medium">Email</h3>
                     <p className="mt-1 text-gray-300">
-                      {content?.email || "info@luxuryhotel.com"}
+                      {content?.email || "info@iftinhotel.com"}
                     </p>
                   </div>
                 </div>

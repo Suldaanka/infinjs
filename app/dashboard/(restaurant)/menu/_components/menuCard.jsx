@@ -33,7 +33,7 @@ export default function MenuCard({ menuItems, onAddToOrder }) {
             key={item.id}
             className="shadow-lg p-0 hover:shadow-xl transition relative group"
           >
-            <CardContent className="flex flex-col px-3">
+            <CardContent className="flex flex-col p-3">
               {firstImageUrl && (
                 <div className="relative w-full h-[160px] rounded overflow-hidden mb-2">
                   <Image

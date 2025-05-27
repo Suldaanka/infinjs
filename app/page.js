@@ -13,22 +13,14 @@ import Testimonial from "@/components/testimonial";
 import landingPageContent from "@/constants/landinpageContent";
 import { useEffect} from "react";
 import { useRouter } from "next/navigation";
-
-
 import { useSelector } from "react-redux";
-
-
-
-
-
-
 
 
 export default function Home() {
   const language = useSelector(state => state.language.current);
   const content = landingPageContent[language][0];
  
-  const user = useSelector(state => state.user.user);
+ /*  const user = useSelector(state => state.user.user);
   const userStatus = useSelector(state => state.user.status); // Added userStatus
   const router = useRouter();
   console.log("user Data", user, "status", userStatus); // Updated console log
@@ -43,7 +35,7 @@ export default function Home() {
       // No explicit redirection for other roles or if user is null after success; they stay on home.
     }
     // Do nothing if status is 'loading', 'idle', or 'failed' to allow default page content to render.
-  }, [user, userStatus, router]);
+  }, [user, userStatus, router]); */
 
   
   return (

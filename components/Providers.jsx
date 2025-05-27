@@ -6,6 +6,7 @@ import { store } from '@/redux/stote.js';
 import { Toaster } from 'sonner';
 import { QueryProvider } from '@/components/QueryProvider';
 import dynamic from 'next/dynamic';
+import { ThemeProvider } from './theme-provider';
 
 
 const UserLoader = dynamic(
@@ -18,7 +19,14 @@ export function ClientProviders({ children }) {
       <Provider store={store}>
         <QueryProvider>
           <UserLoader />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
+            </ThemeProvider>
         </QueryProvider>
         <Toaster />
       </Provider>

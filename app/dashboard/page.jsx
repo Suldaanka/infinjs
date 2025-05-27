@@ -43,7 +43,7 @@ export default function Page() {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  useEffect(() => {
+ /*  useEffect(() => {
     // Only attempt to redirect if user data loading is complete and successful
     if (status === 'succeeded') {
       if (!user || (user.role !== 'WAITER' && user.role !== 'ADMIN')) {
@@ -54,7 +54,7 @@ export default function Page() {
     }
     // If status is 'loading', 'idle', or 'failed', do nothing here.
     // The main component return will handle showing Loading component or error messages.
-  }, [user, status, router]);
+  }, [user, status, router]); */
 
   if (status === 'loading' || isLoading) {
     return (

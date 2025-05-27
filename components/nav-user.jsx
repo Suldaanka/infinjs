@@ -10,10 +10,35 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user, status: userStatus } = useSelector((state) => state.user); // Get user and status
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    // Render a placeholder that's consistent with the server render
+    // Or a minimal version that won't cause hydration issues
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg">
+            <Avatar className="h-8 w-8 rounded-lg">
+              <AvatarFallback className="rounded-lg">?</AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium text-gray-400">Loading...</span> 
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
  
   // --------------- Handle loading and unauthenticated states ----------------
   if (userStatus === 'loading') {
@@ -113,3 +138,4 @@ export function NavUser() {
     </SidebarMenu>
   );
 }
+

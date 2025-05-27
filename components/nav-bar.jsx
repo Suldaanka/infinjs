@@ -20,8 +20,10 @@ export default function NavBar() {
   const dispatch = useDispatch();
   const language = useSelector((state) => state.language.current);
   const [isLanguageInitialized, setIsLanguageInitialized] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true); // Set hasMounted to true once component mounts
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setMobileMenuOpen(false);
@@ -123,7 +125,7 @@ export default function NavBar() {
     </nav>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            {isLanguageInitialized && (
+            {hasMounted && isLanguageInitialized && (
             <button
               onClick={() => dispatch(toggleLanguage())}
             >
@@ -131,17 +133,24 @@ export default function NavBar() {
             </button>
             )}
             <ModeToggle />
-            {isSignedIn ? (
-              <UserButton>
-                <UserButton.MenuItems>
-                  <UserButton.Link
-                    label="Profile"
-                    labelIcon={<User/>}
-                    href="/profile"
-                  />
-                </UserButton.MenuItems>
-              </UserButton>
+            {hasMounted ? (
+              isSignedIn ? (
+                <UserButton>
+                  <UserButton.MenuItems>
+                    <UserButton.Link
+                      label="Profile"
+                      labelIcon={<User/>}
+                      href="/profile"
+                    />
+                  </UserButton.MenuItems>
+                </UserButton>
+              ) : (
+                <button className="hidden md:flex px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">
+                  <Link href="/sign-in">Sign In</Link>
+                </button>
+              )
             ) : (
+              // Placeholder for before hydration: Render the 'Sign In' button as a safe default.
               <button className="hidden md:flex px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">
                 <Link href="/sign-in">Sign In</Link>
               </button>
@@ -161,7 +170,7 @@ export default function NavBar() {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-900 md:hidden">
-            <nav className="flex flex-col p-4 bg-yellow-200 dark:bg-black">
+            <nav className="flex flex-col p-4 bg-background/80 backdrop-blur-md">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -173,9 +182,9 @@ export default function NavBar() {
                 </a>
               ))}
               <div className="mt-6 flex flex-col gap-4">
-                <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm font-medium">
-                  Sign In
-                </button>
+                <Button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm font-medium">
+                  <link href="/sign-in">Sign In</link>
+                </Button>
               </div>
             </nav>
           </div>

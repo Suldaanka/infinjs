@@ -12,9 +12,10 @@ import {
 import { AppSidebar } from '../../components/app-sidebar'
 import { ModeToggle } from '@/components/ModeToggle'
 import { useSelector } from 'react-redux'
-import Orderside from './(restaureant)/menu/_components/Orderside'
-import { ArrowLeft, ListOrderedIcon, LogOut, Package2 } from 'lucide-react'
 
+import { ArrowLeft, ListOrderedIcon, LogOut, Package2 } from 'lucide-react'
+import  Link  from 'next/link'
+import Orderside from './(restaurant)/menu/_components/Orderside'
 export default function Layout({ children }) {
   const { user, status: userStatus } = useSelector((state) => state.user); // Added userStatus
   const path = usePathname();
@@ -58,7 +59,9 @@ export default function Layout({ children }) {
               </div>
               <div className="flex-1">{pageTitle}</div>
               <div className="flex items-center gap-2 px-4">
+                <Link href="/dashboard/menu" className="text-gray-400">
                 <Package2/>
+                </Link>
                 <ModeToggle />
                 <SignOutButton>
                   <LogOut className="h-4 w-4" />

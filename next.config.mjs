@@ -2,7 +2,16 @@ import {withSentryConfig} from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["images.pexels.com","/"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'iftinhotel.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+    ],
   },
   experimental: {
     turbo: {
