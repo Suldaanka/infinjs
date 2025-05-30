@@ -4,9 +4,22 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try {
         await prisma.$connect();
-        const expenses = await prisma.expense.findMany();
+        const expenses = await prisma.expense.findMany({
+            include: {
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },    
+            },
+        });
 
-        return NextResponse.json({ expenses }, { status: 200 });
+        
+           
+            
+        
+
+        return NextResponse.json( expenses , { status: 200 });
     } catch (error) {
         return NextResponse.json(
             { error: "Something went wrong" },

@@ -12,8 +12,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
-//import { toast } from "sonner"
+import { useEffect, useState } from "react"
+import { useMutate } from "@/hooks/useMutate"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -27,8 +28,9 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-
-
+import { useUser } from "@clerk/nextjs"
+import { useQueryClient } from "@tanstack/react-query";
+import {useFetch} from "@/hooks/useFetch";
 
 const FormSchema = z.object({
     description: z.string().min(2, { message: "Description is required." }),
@@ -40,6 +42,18 @@ const FormSchema = z.object({
 });
 
 export function Add() {
+    const [open, setOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [newCategory, setNewCategory] = useState("");
+    const queryClient = useQueryClient();
+    const { mutate: mutateExpense } = useMutate("/api/expense/add",['expenses'] );
+    const { mutate: mutateCategory } = useMutate("/api/expense/category/add", ['categories']);
+    const { data: categories } = useFetch("/api/expense/category", ['categories']);
+
+    
+
+    const {user} = useUser()
+
 
     const form = useForm({
         resolver: zodResolver(FormSchema),
@@ -51,13 +65,70 @@ export function Add() {
         },
     });
 
-
-    function onSubmit(data) {
-        console.log(data); 
-
+    async function onSubmit(data) {
+        try {
+            setIsSubmitting(true);
+    
+            const currentDate = new Date();
+    
+            // Prepare the data for the API according to your Prisma schema
+            const formattedData = {
+                description: data.description,
+                category: data.category,
+                amount: parseFloat(data.amount),
+                paidById: user.id || null,
+                type: data.type,
+                date: currentDate,
+                createdAt: currentDate,
+            };
+    
+            console.log("Formatted data:", formattedData);
+    
+            mutateExpense(formattedData);
+            
+            // Add these lines to invalidate and refetch the expenses query
+            queryClient.invalidateQueries({ queryKey: ["expenses"] });
+            await queryClient.refetchQueries({ queryKey: ["expenses"] });
+    
+            // If you had toast imported, you could use this
+            toast.success("Expense added successfully");
+    
+            console.log("Expense added:", formattedData);
+    
+            // Reset the form
+            form.reset({
+                description: "",
+                category: "",
+                amount: 0,
+                type: "outcome",
+            });
+    
+            // Close the dialog
+            setOpen(false);
+        } catch (error) {
+            console.error("Error adding expense:", error);
+            toast.error("Failed to add expense");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
+
+    const handleCategoryChange = (e) => {
+        setNewCategory(e.target.value);
+    }
+
+   
+
+    const handleCategorySubmit = async (e) => {
+        
+        e.preventDefault();
+      
+        mutateCategory({ name: newCategory });
+        toast.success("Category added successfully");
+      }
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">Add Expense</Button>
             </DialogTrigger>
@@ -101,11 +172,28 @@ export function Add() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="food">Food</SelectItem>
-                                                <SelectItem value="transport">Transport</SelectItem>
-                                                <SelectItem value="bills">Bills</SelectItem>
-                                                <SelectItem value="salary">Salary</SelectItem>
-                                                <SelectItem value="others">Others</SelectItem>
+
+                                                {
+  categories && categories.length > 0 ? (
+    categories.map((category) => (
+      <SelectItem key={category.id} value={category.id}>
+        {category.name}
+      </SelectItem>
+    ))
+  ) : (
+    <SelectItem key={"no-category"} value="no-category">
+      No categories found
+    </SelectItem>
+  )
+}
+
+                                                <div>
+                                                    <form onSubmit={(e) => e.preventDefault()}>
+                                                        <Input placeholder="Add new category" onChange={(e) => handleCategoryChange(e)} />
+                                                        <Button type="submit" onClick={handleCategorySubmit}>Add</Button>
+                                                    </form>
+                                                </div>
+
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -152,10 +240,11 @@ export function Add() {
                                 )}
                             />
 
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                         </form>
                     </Form>
-
                 </div>
             </DialogContent>
         </Dialog>

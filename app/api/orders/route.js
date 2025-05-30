@@ -3,16 +3,29 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        await prisma.$connect();
-        const orders = await prisma.order.findMany();
-
-        return NextResponse.json({ orders }, { status: 200 });
+        const orders = await prisma.order.findMany({
+            include: {
+                items: {
+                    include: {
+                        menuItem: true 
+                    }
+                },
+                room: true,
+                table: true,
+                user: true
+            },
+            take: 10,
+            skip: 0,
+            orderBy: { createdAt: 'desc' },
+        });
+        
+        return NextResponse.json(orders, { status: 200 });
     } catch (error) {
+        console.error("Failed to fetch orders:", error);
+        
         return NextResponse.json(
-            { error: "Something went wrong" },
+            { error: "Failed to fetch orders", details: error.message },
             { status: 500 }
-        )
-    }finally{
-        prisma.$disconnect();
+        );
     }
 }
