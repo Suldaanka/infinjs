@@ -102,13 +102,15 @@ export function DataTable({ columns, data, amountColumn = "amount" }) {
     // Create and download CSV file
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${pathname.replace('/', '')}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (typeof window !== 'undefined') {
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${pathname.replace('/', '')}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
  

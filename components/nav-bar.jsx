@@ -24,46 +24,54 @@ export default function NavBar() {
 
   useEffect(() => {
     setHasMounted(true); // Set hasMounted to true once component mounts
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setMobileMenuOpen(false);
-      }
-    };
+    if (hasMounted) {
+      const handleResize = () => {
+        if (window.innerWidth >= 768) {
+          setMobileMenuOpen(false);
+        }
+      };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, [hasMounted]);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    if (hasMounted) {
+      if (mobileMenuOpen) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [mobileMenuOpen]);
+      return () => {
+        document.body.style.overflow = "auto";
+      };
+    }
+  }, [mobileMenuOpen, hasMounted]);
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language');
-    if (savedLanguage && savedLanguage !== language) {
-      dispatch(setLanguage(savedLanguage));
-    } else if (!savedLanguage) {
-      // If no language is saved yet, save the default
-      localStorage.setItem('language', language);
+    if (hasMounted) {
+      const savedLanguage = localStorage.getItem('language');
+      if (savedLanguage && savedLanguage !== language) {
+        dispatch(setLanguage(savedLanguage));
+      } else if (!savedLanguage) {
+        // If no language is saved yet, save the default
+        localStorage.setItem('language', language);
+      }
+      setIsLanguageInitialized(true);
     }
-    setIsLanguageInitialized(true);
-  }, [dispatch, language]); // Added dependencies: dispatch, language
+  }, [dispatch, language, hasMounted]);
 
   const scrollToSection = (e, id) => {
     e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setMobileMenuOpen(false);
+    if (typeof document !== 'undefined') {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        setMobileMenuOpen(false);
+      }
     }
   };
 
@@ -111,7 +119,9 @@ export default function NavBar() {
               onClick={(e) => {
                 if (!isHomepage) {
                   e.preventDefault();
-                  window.location.href = `/${link.href}`;
+                  if (typeof window !== 'undefined') {
+                    window.location.href = `/${link.href}`;
+                  }
                 }
               }}
               key={link.label}

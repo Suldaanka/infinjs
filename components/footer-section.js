@@ -7,9 +7,11 @@ import { motion } from 'framer-motion';
 
 const scrollToSection = (e, id) => {
   e.preventDefault();
-  const element = document.getElementById(id);
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" });
+  if (typeof document !== 'undefined') {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   }
 };
 
